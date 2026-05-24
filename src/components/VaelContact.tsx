@@ -1,11 +1,23 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import Image from 'next/image';
 
 export function VaelContact() {
   return (
-    <section id="contact" className="py-32 md:py-48 px-8 md:px-16 bg-background border-t border-border/10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+    <section id="contact" className="relative py-32 md:py-48 px-8 md:px-16 bg-background border-t border-border/10 overflow-hidden">
+      {/* Immersive Background Image */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+        <Image 
+          src="https://picsum.photos/seed/contact-viz/1920/1080" 
+          alt="Studio Background" 
+          fill 
+          className="object-cover grayscale"
+          data-ai-hint="cinematic studio"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center relative z-10">
         <div className="space-y-12">
           <div className="space-y-6">
             <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block">Get in Touch</span>
@@ -33,7 +45,9 @@ export function VaelContact() {
           </div>
         </div>
 
-        <div className="bg-card/30 p-8 md:p-12 border border-border/10 space-y-8">
+        <div className="bg-card/40 backdrop-blur-sm p-8 md:p-12 border border-border/20 space-y-8 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -translate-y-1/2 translate-x-1/2 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors" />
+          
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 border-b border-border/40 focus-within:border-primary transition-colors">

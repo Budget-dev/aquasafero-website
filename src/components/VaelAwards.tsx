@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function VaelAwards() {
   const awards = [
     { year: '2024', name: "Palme d'Or Nomination", film: 'Cannes Film Festival — Hawthorn', category: 'Best Director' },
@@ -9,8 +11,18 @@ export function VaelAwards() {
   ];
 
   return (
-    <section id="awards" className="py-32 md:py-48 px-8 md:px-16 bg-background">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
+    <section id="awards" className="relative py-32 md:py-48 px-8 md:px-16 bg-background overflow-hidden">
+      {/* Background Cinematic Texture */}
+      <div className="absolute right-0 top-0 w-1/2 h-full opacity-5 pointer-events-none">
+        <Image 
+          src="https://picsum.photos/seed/awards-bg/1000/1500" 
+          alt="Cinematic Texture" 
+          fill 
+          className="object-cover grayscale"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 relative z-10">
         <div className="lg:col-span-5 space-y-8">
           <div className="space-y-4">
             <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block">Recognition</span>
@@ -19,10 +31,20 @@ export function VaelAwards() {
             </h2>
           </div>
           <div className="relative pt-12">
-            <div className="text-[120px] md:text-[200px] font-headline font-light leading-none text-stroke absolute -top-12 -left-4 select-none opacity-40">23</div>
+            <div className="text-[120px] md:text-[200px] font-headline font-light leading-none text-stroke absolute -top-12 -left-4 select-none opacity-20">23</div>
             <p className="relative z-10 text-muted-foreground font-body text-sm max-w-xs pl-8">
               International awards and nominations celebrating visual excellence and narrative innovation across global cinema stages.
             </p>
+          </div>
+          
+          <div className="hidden lg:block relative aspect-video w-full mt-12 border border-border overflow-hidden">
+            <Image 
+              src="https://picsum.photos/seed/festival/800/450" 
+              alt="Festival Appearance" 
+              fill 
+              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              data-ai-hint="film festival"
+            />
           </div>
         </div>
 
