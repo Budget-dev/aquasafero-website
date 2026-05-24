@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Cinematic landscape with moody lighting",
+      "imageUrl": "https://picsum.photos/seed/vael-hero/1920/1080",
+      "imageHint": "cinematic landscape"
+    },
+    {
+      "id": "portrait",
+      "description": "Moody portrait of a director on set",
+      "imageUrl": "https://picsum.photos/seed/vael-portrait/800/1000",
+      "imageHint": "director portrait"
+    },
+    {
+      "id": "on-set",
+      "description": "Behind the scenes camera setup",
+      "imageUrl": "https://picsum.photos/seed/vael-onset/800/600",
+      "imageHint": "film set"
+    },
+    {
+      "id": "film-1",
+      "description": "Dark atmospheric scene from Hawthorn",
+      "imageUrl": "https://picsum.photos/seed/film1/1200/600",
+      "imageHint": "moody forest"
+    },
+    {
+      "id": "film-2",
+      "description": "Intense close up from Vermilion",
+      "imageUrl": "https://picsum.photos/seed/film2/800/450",
+      "imageHint": "dramatic portrait"
+    },
+    {
+      "id": "film-3",
+      "description": "Night city streets from Nocturne",
+      "imageUrl": "https://picsum.photos/seed/film3/800/450",
+      "imageHint": "city night"
+    },
+    {
+      "id": "film-4",
+      "description": "Luxury aesthetic from Aureate",
+      "imageUrl": "https://picsum.photos/seed/film4/800/450",
+      "imageHint": "luxury fashion"
+    },
+    {
+      "id": "film-5",
+      "description": "Vast desert scene from Stillwater",
+      "imageUrl": "https://picsum.photos/seed/film5/800/450",
+      "imageHint": "desert cinematic"
+    }
+  ]
 }
