@@ -104,12 +104,12 @@ const ScrollExpandMedia = ({
   const restOfTitle = title ? title.split(' ').slice(1).join(' ') : '';
 
   return (
-    <div className='transition-colors duration-700 ease-in-out overflow-x-hidden'>
+    <div className='transition-colors duration-700 ease-in-out overflow-x-hidden bg-black'>
       <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
         <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
-          {/* Background Video Container - No white layers */}
+          {/* Background Video Container - Solid Black Base, No Fog */}
           <motion.div
-            className='absolute inset-0 z-0 h-full bg-[#dcdcdc]'
+            className='absolute inset-0 z-0 h-full bg-black'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 - scrollProgress }}
             transition={{ duration: 0.1 }}
@@ -121,26 +121,26 @@ const ScrollExpandMedia = ({
                 muted
                 loop
                 playsInline
-                className='w-full h-full object-cover opacity-80'
+                className='w-full h-full object-cover opacity-100'
               />
             ) : bgImageSrc ? (
               <Image
                 src={bgImageSrc}
                 alt='Background'
                 fill
-                className='object-cover opacity-80'
+                className='object-cover opacity-100'
                 priority
               />
             ) : null}
-            {/* Dark vignette to center focus and add depth */}
-            <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/20 pointer-events-none" />
+            {/* Subtle vignette for cinematic focus */}
+            <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/40 pointer-events-none" />
           </motion.div>
 
           <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
             <div className='flex flex-col items-center justify-center w-full h-[100dvh] relative'>
-              {/* Media Container - Sharp Corners */}
+              {/* Foreground Media Container - Sharp Corners */}
               <div
-                className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl bg-black rounded-none border border-white/5'
+                className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl bg-black rounded-none border border-white/10'
                 style={{
                   width: `${mediaWidth}px`,
                   height: `${mediaHeight}px`,
@@ -161,9 +161,9 @@ const ScrollExpandMedia = ({
                       className='w-full h-full object-cover rounded-none'
                     />
                     <motion.div
-                      className='absolute inset-0 bg-black/20'
-                      initial={{ opacity: 0.5 }}
-                      animate={{ opacity: 0.2 - scrollProgress * 0.2 }}
+                      className='absolute inset-0 bg-black/10'
+                      initial={{ opacity: 0.2 }}
+                      animate={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     />
                   </div>
@@ -174,12 +174,6 @@ const ScrollExpandMedia = ({
                       alt={title || 'Media content'}
                       fill
                       className='object-cover rounded-none'
-                    />
-                    <motion.div
-                      className='absolute inset-0 bg-black/40'
-                      initial={{ opacity: 0.6 }}
-                      animate={{ opacity: 0.4 - scrollProgress * 0.3 }}
-                      transition={{ duration: 0.2 }}
                     />
                   </div>
                 )}
@@ -212,7 +206,7 @@ const ScrollExpandMedia = ({
                 }`}
               >
                 <motion.h1
-                  className='font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] italic text-foreground tracking-tighter'
+                  className='font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] italic text-white tracking-tighter'
                   style={{ transform: `translateX(-${textTranslateX}vw)` }}
                 >
                   {firstWord}

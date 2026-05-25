@@ -11,11 +11,11 @@ import ScrollExpandMedia from '@/components/ScrollExpandMedia';
 export default function Home() {
   // Foreground/Middle Box Video
   const heroVideo = "https://aquasaferoworks.sirv.com/1103193_1080p_Endurance_1280x720.mp4";
-  // Background Video
+  // Background Video - Cinematic Atmospheric
   const heroBgVideo = "https://aquasaferoworks.sirv.com/6013655_People_Men_1280x720.mp4";
   
   return (
-    <main className="relative selection:bg-primary/30">
+    <main className="relative selection:bg-primary/30 bg-black">
       <VaelHeader />
       
       <ScrollExpandMedia

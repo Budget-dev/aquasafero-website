@@ -55,7 +55,7 @@ export function VaelFilms() {
               onMouseLeave={() => setHoveredFilm(null)}
               className={`group relative overflow-hidden bg-black aspect-video cursor-pointer transition-all ${isLarge ? 'md:col-span-2 lg:col-span-2 md:aspect-[21/9]' : ''}`}
             >
-              {/* Thumbnail Image - Grayscale REMOVED */}
+              {/* Thumbnail Image - Full Color */}
               <div className={`absolute inset-0 z-20 transition-opacity duration-700 pointer-events-none ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                 <Image 
                   src={`https://img.youtube.com/vi/${film.id}/maxresdefault.jpg`} 
@@ -63,7 +63,7 @@ export function VaelFilms() {
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
               </div>
 
               {/* Autoplay Video Embed on Hover */}
@@ -75,7 +75,7 @@ export function VaelFilms() {
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
-                  <div className="absolute inset-0 z-20" />
+                  <div className="absolute inset-0 z-30 bg-transparent" />
                 </div>
               )}
               
@@ -97,8 +97,6 @@ export function VaelFilms() {
                 <h3 className="text-2xl md:text-4xl font-headline text-white mb-2 italic">{film.title}</h3>
                 <p className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-body">{film.meta}</p>
               </div>
-              
-              <div className="absolute top-0 right-0 w-24 h-16 pointer-events-none z-[50] bg-transparent" />
             </div>
           )
         })}
