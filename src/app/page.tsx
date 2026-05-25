@@ -9,8 +9,8 @@ import ScrollExpandMedia from '@/components/ScrollExpandMedia';
 
 export default function Home() {
   const heroBg = "https://picsum.photos/seed/vael-hero/1920/1080";
-  // Using 'Hawthorn' as the main reel video
-  const reelVideo = "https://youtu.be/gJKxIAmhbvg";
+  // Using a direct MP4 source for the hero as requested (no YouTube)
+  const heroVideo = "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175";
   
   return (
     <main className="relative selection:bg-primary/30">
@@ -18,7 +18,7 @@ export default function Home() {
       
       <ScrollExpandMedia
         mediaType="video"
-        mediaSrc={reelVideo}
+        mediaSrc={heroVideo}
         bgImageSrc={heroBg}
         title="Architecture of Emotion"
         date="2026 Directing Reel"

@@ -57,17 +57,14 @@ const ScrollExpandMedia = ({
     if (!mounted) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // If fully expanded and at the top, allow collapsing back
       if (mediaFullyExpanded) {
         if (window.scrollY <= 10 && e.deltaY < 0) {
           setMediaFullyExpanded(false);
           setScrollProgress(0.99);
-          // e.preventDefault(); // Don't block for a smooth reverse
         }
         return;
       }
 
-      // If not expanded, capture wheel to animate progress
       if (!mediaFullyExpanded) {
         e.preventDefault();
         const scrollDelta = e.deltaY * 0.0015;
@@ -118,7 +115,6 @@ const ScrollExpandMedia = ({
     };
 
     const handleScroll = (): void => {
-      // Block body scroll until expanded
       if (!mediaFullyExpanded && typeof window !== 'undefined' && window.scrollY > 0) {
         window.scrollTo(0, 0);
       }
@@ -138,19 +134,6 @@ const ScrollExpandMedia = ({
     };
   }, [scrollProgress, mediaFullyExpanded, touchStartY, mounted]);
 
-  const getCleanYoutubeUrl = (url: string) => {
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) return url;
-    let videoId = '';
-    if (url.includes('v=')) {
-      videoId = url.split('v=')[1]?.split('&')[0];
-    } else if (url.includes('si=')) {
-        videoId = url.split('/').pop()?.split('?')[0] || '';
-    } else {
-      videoId = url.split('/').pop()?.split('?')[0] || '';
-    }
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`;
-  };
-
   if (!mounted) return null;
 
   const baseW = isMobileState ? 280 : 400;
@@ -164,6 +147,8 @@ const ScrollExpandMedia = ({
 
   const firstWord = title ? title.split(' ')[0] : '';
   const restOfTitle = title ? title.split(' ').slice(1).join(' ') : '';
+
+  const isYouTube = mediaSrc.includes('youtube.com') || mediaSrc.includes('youtu.be');
 
   return (
     <div ref={sectionRef} className='bg-background overflow-x-hidden'>
@@ -185,7 +170,7 @@ const ScrollExpandMedia = ({
         <div className='relative flex flex-col items-center justify-center min-h-screen w-full'>
           {/* Media Container - Sharp Corners */}
           <div
-            className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl clean-video-wrapper bg-black'
+            className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl bg-black'
             style={{
               width: `${mediaWidth}px`,
               height: `${mediaHeight}px`,
@@ -194,18 +179,31 @@ const ScrollExpandMedia = ({
             }}
           >
             {mediaType === 'video' ? (
-              <div className='relative w-full h-full pointer-events-none'>
-                <iframe
-                  width='100%'
-                  height='100%'
-                  src={getCleanYoutubeUrl(mediaSrc)}
-                  className='w-full h-full scale-[1.05]'
-                  frameBorder='0'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                />
-                <div className='absolute inset-0 bg-primary/5 mix-blend-overlay' />
-                <div className="absolute top-0 right-0 w-32 h-20 bg-black/10 z-30" />
-              </div>
+              isYouTube ? (
+                <div className='relative w-full h-full pointer-events-none clean-video-wrapper'>
+                  <iframe
+                    width='100%'
+                    height='100%'
+                    src={`https://www.youtube.com/embed/${mediaSrc.split('v=')[1]?.split('&')[0]}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`}
+                    className='w-full h-full scale-[1.05]'
+                    frameBorder='0'
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                  />
+                </div>
+              ) : (
+                <div className='relative w-full h-full'>
+                  <video
+                    src={mediaSrc}
+                    poster={posterSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload='auto'
+                    className='w-full h-full object-cover'
+                  />
+                </div>
+              )
             ) : (
               <div className='relative w-full h-full bg-black'>
                 <Image
@@ -214,7 +212,6 @@ const ScrollExpandMedia = ({
                   fill
                   className='object-cover grayscale'
                 />
-                <div className='absolute inset-0 bg-primary/10 mix-blend-overlay' />
               </div>
             )}
           </div>
