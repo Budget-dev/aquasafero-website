@@ -5,7 +5,6 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X } from 'lucide-react';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import {
   Dialog,
@@ -92,17 +91,7 @@ export function VaelSlider() {
   };
 
   return (
-    <section className="relative w-full bg-white py-24 md:py-32 overflow-hidden select-none">
-      <div className="max-w-7xl mx-auto px-8 mb-16 flex flex-col md:flex-row justify-between items-end gap-6">
-        <div className="space-y-2">
-          <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block font-medium">Selected Works</span>
-          <h2 className="text-5xl md:text-8xl font-headline italic tracking-tighter">Cinematic <span className="text-primary not-italic">Vision</span></h2>
-        </div>
-        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground max-w-[200px] leading-relaxed">
-          Exploring the architecture of light and narrative.
-        </div>
-      </div>
-
+    <section className="relative w-full bg-white py-16 md:py-24 overflow-hidden select-none">
       <div className="embla overflow-visible" ref={emblaRef}>
         <div className="embla__container flex">
           {slides.map((slide, index) => {
@@ -121,7 +110,7 @@ export function VaelSlider() {
                     opacity: isActive ? 1 : 0.4,
                   }}
                   transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-                  className="relative aspect-[16/9] md:aspect-[21/10] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] bg-black group cursor-pointer border border-black/5"
+                  className="relative aspect-[16/9] md:aspect-[21/10] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] bg-black group cursor-pointer border border-black/5"
                 >
                   {/* Background YouTube Preview */}
                   <div className="absolute inset-0 pointer-events-none transform scale-[1.3]">
@@ -134,33 +123,14 @@ export function VaelSlider() {
                   </div>
                   
                   {/* Premium Grain & Vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 z-10" />
-                  <div className="absolute inset-0 cinematic-vignette opacity-40 z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-10" />
+                  <div className="absolute inset-0 cinematic-vignette opacity-30 z-10" />
 
                   {/* Play UI */}
                   <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                     <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-white/10 bg-black/20 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-primary/20 hover:border-primary/40">
                       <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white ml-1" />
                     </div>
-                  </div>
-
-                  {/* Text Content */}
-                  <div className="absolute bottom-10 left-10 md:bottom-20 md:left-20 z-30 pointer-events-none">
-                    <motion.div
-                      animate={{ 
-                        y: isActive ? 0 : 40,
-                        opacity: isActive ? 1 : 0 
-                      }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
-                      className="space-y-2 md:space-y-4"
-                    >
-                      <span className="text-[9px] md:text-[11px] tracking-[0.5em] uppercase text-primary font-medium block">
-                        {slide.category}
-                      </span>
-                      <h3 className="text-5xl md:text-[9rem] font-bold leading-[0.8] tracking-tighter text-white uppercase font-body italic">
-                        {slide.title}
-                      </h3>
-                    </motion.div>
                   </div>
                 </motion.div>
               </div>
@@ -170,7 +140,7 @@ export function VaelSlider() {
       </div>
 
       {/* Progress Indicators */}
-      <div className="flex justify-center gap-4 mt-16 md:mt-24">
+      <div className="flex justify-center gap-4 mt-12 md:mt-16">
         {slides.map((_, i) => (
           <button
             key={i}
