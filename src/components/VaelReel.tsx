@@ -90,6 +90,7 @@ function FrameComponent({
               loop
               muted
               playsInline
+              autoPlay
               ref={videoRef}
             />
           </div>
@@ -160,7 +161,6 @@ export function VaelReel() {
   const hoverSize = 6;
   const gapSize = 4;
 
-  // Cinematic frame placeholder SVG (Minimalist white corners/edges)
   const cornerSvg = `data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 64V2H64' stroke='white' stroke-width='1'/%3E%3C/svg%3E`;
   const edgeHSvg = `data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2H64' stroke='white' stroke-width='1'/%3E%3C/svg%3E`;
   const edgeVSvg = `data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 0V64' stroke='white' stroke-width='1'/%3E%3C/svg%3E`;
