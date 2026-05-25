@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -14,35 +13,37 @@ interface SlideItem {
   title: string;
   category: string;
   imageUrl: string;
-  videoUrl?: string;
+  youtubeId?: string;
 }
 
 const slides: SlideItem[] = [
   {
     id: '1',
-    title: 'HUECO MUNDO',
-    category: 'camera',
+    title: 'HAWTHORN',
+    category: 'directed by errol aditya',
     imageUrl: 'https://picsum.photos/seed/slide1/1200/800',
-    videoUrl: 'https://aquasaferoworks.sirv.com/1103193_1080p_Endurance_1280x720.mp4',
+    youtubeId: 'gJKxIAmhbvg',
   },
   {
     id: '2',
-    title: 'AUREATE',
-    category: 'narrative',
+    title: 'VERMILION',
+    category: 'visual narrative',
     imageUrl: 'https://picsum.photos/seed/slide2/1200/800',
-    videoUrl: 'https://aquasaferoworks.sirv.com/6013655_People_Men_1280x720.mp4',
+    youtubeId: 'QdEZtNyJb5g',
   },
   {
     id: '3',
     title: 'NOCTURNE',
     category: 'cinematography',
     imageUrl: 'https://picsum.photos/seed/slide3/1200/800',
+    youtubeId: 'O1p-JVaAQV0',
   },
   {
     id: '4',
-    title: 'STILLWATER',
-    category: 'direction',
+    title: 'AUREATE',
+    category: 'commissioned cinema',
     imageUrl: 'https://picsum.photos/seed/slide4/1200/800',
+    youtubeId: 'xTrPSfbWa0w',
   },
 ];
 
@@ -52,9 +53,9 @@ export function VaelSlider() {
       loop: true, 
       align: 'center',
       skipSnaps: false,
-      duration: 35
+      duration: 40
     }, 
-    [Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true })]
+    [Autoplay({ delay: 8000, stopOnInteraction: true, stopOnMouseEnter: true })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -71,11 +72,22 @@ export function VaelSlider() {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
+  const getYoutubeEmbed = (id: string, isSelected: boolean) => {
+    const base = `https://www.youtube.com/embed/${id}`;
+    const params = `?autoplay=${isSelected ? 1 : 0}&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
+    return base + params;
+  };
+
   return (
-    <section className="relative w-full bg-[#f5f5f3] py-24 md:py-32 overflow-hidden select-none">
-      <div className="max-w-7xl mx-auto px-8 mb-12">
-        <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block mb-2 font-medium">Portfolio Showcase</span>
-        <h2 className="text-4xl md:text-7xl font-headline italic tracking-tighter">Cinematic <span className="text-primary not-italic">Vision</span></h2>
+    <section className="relative w-full bg-white py-24 md:py-32 overflow-hidden select-none">
+      <div className="max-w-7xl mx-auto px-8 mb-16 flex flex-col md:flex-row justify-between items-end gap-6">
+        <div className="space-y-2">
+          <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block font-medium">Selected Works</span>
+          <h2 className="text-5xl md:text-8xl font-headline italic tracking-tighter">Cinematic <span className="text-primary not-italic">Vision</span></h2>
+        </div>
+        <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground max-w-[200px] leading-relaxed">
+          Exploring the architecture of light and narrative.
+        </div>
       </div>
 
       <div className="embla overflow-visible" ref={emblaRef}>
@@ -86,54 +98,64 @@ export function VaelSlider() {
             return (
               <div 
                 key={slide.id} 
-                className="embla__slide flex-[0_0_85%] md:flex-[0_0_70%] min-w-0 px-4 md:px-8 relative"
+                className="embla__slide flex-[0_0_90%] md:flex-[0_0_75%] min-w-0 px-3 md:px-10 relative"
               >
                 <motion.div
                   initial={false}
                   animate={{ 
-                    scale: isActive ? 1 : 0.92,
-                    opacity: isActive ? 1 : 0.5,
+                    scale: isActive ? 1 : 0.94,
+                    opacity: isActive ? 1 : 0.4,
                   }}
-                  transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-                  className="relative aspect-[21/10] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.3)] bg-black group cursor-grab active:cursor-grabbing border border-black/5"
+                  transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                  className="relative aspect-[16/9] md:aspect-[21/10] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.4)] bg-black group cursor-grab active:cursor-grabbing border border-black/5"
                 >
-                  {/* Background Image */}
-                  <Image
-                    src={slide.imageUrl}
-                    alt={slide.title}
-                    fill
-                    className="object-cover transition-transform duration-[3s] ease-out group-hover:scale-105"
-                    priority={index === 0}
-                  />
-                  
-                  {/* Play UI if it's a video item */}
-                  {slide.videoUrl && (
-                    <div className="absolute inset-0 flex items-center justify-center z-20">
-                      <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/20 group-hover:border-primary/40">
-                        <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white ml-1" />
-                      </div>
+                  {/* Background Image / Video */}
+                  {slide.youtubeId ? (
+                    <div className="absolute inset-0 pointer-events-none transform scale-[1.3]">
+                      <iframe
+                        className="w-full h-full"
+                        src={getYoutubeEmbed(slide.youtubeId, isActive)}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      />
                     </div>
+                  ) : (
+                    <Image
+                      src={slide.imageUrl}
+                      alt={slide.title}
+                      fill
+                      className="object-cover transition-transform duration-[4s] ease-out group-hover:scale-105"
+                      priority={index === 0}
+                    />
                   )}
+                  
+                  {/* Premium Grain & Vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 z-10" />
+                  <div className="absolute inset-0 cinematic-vignette opacity-40 z-10" />
 
-                  {/* Gradient Overlay for Text Readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 z-10" />
+                  {/* Play UI if it's a video item */}
+                  <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-white/10 bg-black/20 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-primary/20 hover:border-primary/40">
+                      <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white ml-1" />
+                    </div>
+                  </div>
 
-                  {/* Text Content */}
-                  <div className="absolute bottom-8 left-8 md:bottom-16 md:left-16 z-30 pointer-events-none">
+                  {/* Text Content - Credit Style */}
+                  <div className="absolute bottom-10 left-10 md:bottom-20 md:left-20 z-30 pointer-events-none">
                     <motion.div
                       animate={{ 
-                        y: isActive ? 0 : 30,
+                        y: isActive ? 0 : 40,
                         opacity: isActive ? 1 : 0 
                       }}
-                      transition={{ duration: 0.6, delay: 0.2 }}
-                      className="space-y-1 md:space-y-3"
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      className="space-y-2 md:space-y-4"
                     >
-                      <h3 className="text-4xl md:text-[7rem] font-bold leading-[0.8] tracking-tighter text-white uppercase font-body">
+                      <span className="text-[9px] md:text-[11px] tracking-[0.5em] uppercase text-primary font-medium block">
+                        {slide.category}
+                      </span>
+                      <h3 className="text-5xl md:text-[9rem] font-bold leading-[0.8] tracking-tighter text-white uppercase font-body italic">
                         {slide.title}
                       </h3>
-                      <p className="text-[10px] md:text-xs tracking-[0.5em] uppercase text-white/50 font-medium">
-                        {slide.category}
-                      </p>
                     </motion.div>
                   </div>
                 </motion.div>
@@ -144,14 +166,14 @@ export function VaelSlider() {
       </div>
 
       {/* Progress Indicators */}
-      <div className="flex justify-center gap-3 mt-16">
+      <div className="flex justify-center gap-4 mt-16 md:mt-24">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => emblaApi?.scrollTo(i)}
             className={cn(
-              "h-1 transition-all duration-700 rounded-full",
-              selectedIndex === i ? "w-16 bg-primary" : "w-8 bg-border hover:bg-muted-foreground/30"
+              "h-0.5 transition-all duration-1000",
+              selectedIndex === i ? "w-24 bg-primary" : "w-12 bg-border hover:bg-muted-foreground/40"
             )}
             aria-label={`Go to slide ${i + 1}`}
           />
