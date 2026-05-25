@@ -120,17 +120,19 @@ const ScrollExpandMedia = ({
                 muted
                 loop
                 playsInline
-                className='w-full h-full object-cover brightness-110 opacity-20'
+                className='w-full h-full object-cover opacity-30'
               />
             ) : bgImageSrc ? (
               <Image
                 src={bgImageSrc}
                 alt='Background'
                 fill
-                className='object-cover brightness-110 opacity-20'
+                className='object-cover opacity-30'
                 priority
               />
             ) : null}
+            {/* Dark vignette to center focus, NOT a white layer */}
+            <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/10 pointer-events-none" />
           </motion.div>
 
           <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
@@ -158,9 +160,9 @@ const ScrollExpandMedia = ({
                       className='w-full h-full object-cover rounded-none'
                     />
                     <motion.div
-                      className='absolute inset-0 bg-black/30'
-                      initial={{ opacity: 0.7 }}
-                      animate={{ opacity: 0.3 - scrollProgress * 0.3 }}
+                      className='absolute inset-0 bg-black/20'
+                      initial={{ opacity: 0.5 }}
+                      animate={{ opacity: 0.2 - scrollProgress * 0.2 }}
                       transition={{ duration: 0.2 }}
                     />
                   </div>
@@ -173,9 +175,9 @@ const ScrollExpandMedia = ({
                       className='object-cover rounded-none'
                     />
                     <motion.div
-                      className='absolute inset-0 bg-black/50'
-                      initial={{ opacity: 0.7 }}
-                      animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
+                      className='absolute inset-0 bg-black/40'
+                      initial={{ opacity: 0.6 }}
+                      animate={{ opacity: 0.4 - scrollProgress * 0.3 }}
                       transition={{ duration: 0.2 }}
                     />
                   </div>
