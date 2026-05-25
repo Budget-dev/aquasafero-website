@@ -6,13 +6,13 @@ import Image from 'next/image';
 export function VaelContact() {
   return (
     <section id="contact" className="relative py-32 md:py-48 px-8 md:px-16 bg-background border-t border-border/10 overflow-hidden">
-      {/* Immersive Background Image */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+      {/* Immersive Background Image - Full Color */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
         <Image 
           src="https://picsum.photos/seed/contact-viz/1920/1080" 
           alt="Studio Background" 
           fill 
-          className="object-cover grayscale"
+          className="object-cover"
           data-ai-hint="cinematic studio"
         />
       </div>

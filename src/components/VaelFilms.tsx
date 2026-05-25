@@ -26,6 +26,7 @@ export function VaelFilms() {
   const [hoveredFilm, setHoveredFilm] = useState<string | null>(null);
 
   const getCleanYoutubeEmbed = (id: string, isHovered: boolean) => {
+    // Brandless autoplay YouTube embed
     return `https://www.youtube.com/embed/${id}?autoplay=${isHovered ? 1 : 0}&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
@@ -55,7 +56,7 @@ export function VaelFilms() {
               onMouseLeave={() => setHoveredFilm(null)}
               className={`group relative overflow-hidden bg-black aspect-video cursor-pointer transition-all ${isLarge ? 'md:col-span-2 lg:col-span-2 md:aspect-[21/9]' : ''}`}
             >
-              {/* Thumbnail Image - Full Color */}
+              {/* Thumbnail Image - Sharp and Colorful */}
               <div className={`absolute inset-0 z-20 transition-opacity duration-700 pointer-events-none ${isHovered ? 'opacity-0' : 'opacity-100'}`}>
                 <Image 
                   src={`https://img.youtube.com/vi/${film.id}/maxresdefault.jpg`} 
@@ -68,31 +69,32 @@ export function VaelFilms() {
 
               {/* Autoplay Video Embed on Hover */}
               {isHovered && (
-                <div className="absolute inset-0 z-10 pointer-events-none scale-[1.3]">
+                <div className="absolute inset-0 z-30 pointer-events-none scale-[1.3]">
                   <iframe
                     className="w-full h-full"
                     src={getCleanYoutubeEmbed(film.id, true)}
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
-                  <div className="absolute inset-0 z-30 bg-transparent" />
+                  {/* Invisible overlay to prevent interaction with YT UI */}
+                  <div className="absolute inset-0 z-40 bg-transparent" />
                 </div>
               )}
               
               {/* UI Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-40">
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-50 pointer-events-none">
                 <div className="w-16 h-16 rounded-full border border-primary/50 flex items-center justify-center bg-black/20 backdrop-blur-sm group-hover:scale-110 transition-transform">
                   <Play className="w-6 h-6 text-primary fill-primary" />
                 </div>
               </div>
 
               {film.award && (
-                <div className="absolute top-6 right-6 border border-primary/40 px-3 py-1 text-[9px] tracking-[0.2em] text-primary uppercase z-40 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="absolute top-6 right-6 border border-primary/40 px-3 py-1 text-[9px] tracking-[0.2em] text-primary uppercase z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   {film.award}
                 </div>
               )}
 
-              <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out z-40">
+              <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out z-50">
                 <span className="text-[9px] tracking-[0.4em] text-primary uppercase mb-2 block font-body">0{idx + 1} / {film.tag}</span>
                 <h3 className="text-2xl md:text-4xl font-headline text-white mb-2 italic">{film.title}</h3>
                 <p className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-body">{film.meta}</p>

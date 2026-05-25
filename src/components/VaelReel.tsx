@@ -48,9 +48,9 @@ function FrameComponent({
 
   useEffect(() => {
     if (isHovered) {
-      videoRef.current?.play()
+      videoRef.current?.play().catch(() => {});
     } else {
-      videoRef.current?.pause()
+      videoRef.current?.pause();
     }
   }, [isHovered])
 
@@ -247,16 +247,20 @@ export function VaelReel() {
   const edgeHSvg = `data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 2H64' stroke='white' stroke-width='1'/%3E%3C/svg%3E`;
   const edgeVSvg = `data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 0V64' stroke='white' stroke-width='1'/%3E%3C/svg%3E`;
 
+  // Reliable Sirv MP4s provided by user
+  const sirv1 = "https://aquasaferoworks.sirv.com/1103193_1080p_Endurance_1280x720.mp4";
+  const sirv2 = "https://aquasaferoworks.sirv.com/6013655_People_Men_1280x720.mp4";
+
   const frames: Frame[] = [
-    { id: 0, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 0, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 1, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 4, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 2, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 8, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 3, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 0, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 4, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 4, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 5, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 8, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 6, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 0, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 7, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 4, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
-    { id: 8, video: "https://player.vimeo.com/external/494252666.hd.mp4?s=2f5577346418342774d009fa5d60893325c8991b&profile_id=175", defaultPos: { x: 8, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 0, video: sirv1, defaultPos: { x: 0, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 1, video: sirv2, defaultPos: { x: 4, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 2, video: sirv1, defaultPos: { x: 8, y: 0, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 3, video: sirv2, defaultPos: { x: 0, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 4, video: sirv1, defaultPos: { x: 4, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 5, video: sirv2, defaultPos: { x: 8, y: 4, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 6, video: sirv1, defaultPos: { x: 0, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 7, video: sirv2, defaultPos: { x: 4, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
+    { id: 8, video: sirv1, defaultPos: { x: 8, y: 8, w: 4, h: 4 }, corner: cornerSvg, edgeHorizontal: edgeHSvg, edgeVertical: edgeVSvg, mediaSize: 1.1, borderThickness: 1, borderSize: 98 },
   ];
 
   return (
@@ -265,8 +269,10 @@ export function VaelReel() {
         <span className="text-[10px] tracking-[0.5em] uppercase text-primary/60 block">Kinetic Work Reel — 2024</span>
       </div>
       
-      <div className="px-4 md:px-16 h-[500px] md:h-[800px]">
-        <DynamicFrameLayout frames={frames} showFrames={true} hoverSize={6} gapSize={4} />
+      <div className="px-4 md:px-16 h-[500px] md:h-[800px] flex items-center justify-center">
+        <div className="w-full h-full max-w-[1400px]">
+          <DynamicFrameLayout frames={frames} showFrames={true} hoverSize={6} gapSize={4} />
+        </div>
       </div>
     </section>
   )
