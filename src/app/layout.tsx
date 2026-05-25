@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Errol Aditya — Director Portfolio',
-  description: 'Between the light and shadow. Cinematic worlds by Errol Aditya.',
+  title: 'Errol Aditya — Director & Visual Architect',
+  description: 'The cinematic archive of Errol Aditya. Exploring the intersection of human emotion and visual grandeur through light and shadow.',
 };
 
 export default function RootLayout({
