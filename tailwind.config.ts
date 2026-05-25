@@ -71,6 +71,9 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      backgroundSize: {
+        'shine-size': '300% 300%',
+      },
       keyframes: {
         'accordion-down': {
           from: {
@@ -103,7 +106,12 @@ export default {
         'slow-zoom': {
           '0%': { transform: 'scale(1)' },
           '100%': { transform: 'scale(1.1)' },
-        }
+        },
+        shine: {
+          '0%': { 'background-position': '0% 0%' },
+          '50%': { 'background-position': '100% 100%' },
+          to: { 'background-position': '0% 0%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -112,6 +120,7 @@ export default {
         'scroll-pulse': 'scroll-pulse 2s infinite',
         'fade-in-up': 'fade-in-up 0.8s ease-out forwards',
         'slow-zoom': 'slow-zoom 20s ease-in-out infinite alternate',
+        shine: 'shine var(--duration) infinite linear',
       },
     },
   },
