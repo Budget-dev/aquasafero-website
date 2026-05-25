@@ -2,26 +2,26 @@ import Image from 'next/image';
 import { Play } from 'lucide-react';
 
 const films = [
-  { id: 'gJKxIAmhbvg', tag: 'Feature', title: 'Hawthorn', meta: '2024 — 112 min', award: 'Cannes 2024' },
-  { id: 'QdEZtNyJb5g', tag: 'Short', title: 'Vermilion', meta: '2023 — 28 min', award: 'Sundance 2023' },
-  { id: 'O1p-JVaAQV0', tag: 'Documentary', title: 'Nocturne', meta: '2023 — 88 min', award: 'Berlin 2023' },
-  { id: 'xTrPSfbWa0w', tag: 'Commercial', title: 'Aureate', meta: 'Brand Film — 4 min', award: 'Cannes Lions' },
-  { id: '4UATuJFYKfg', tag: 'Narrative', title: 'Stillwater', meta: '2022 — 97 min', award: 'Venice 2022' },
-  { id: 'sroIT5FQMqs', tag: 'Short', title: 'Echoes', meta: '2023 — 15 min', award: 'TIFF Nominee' },
-  { id: 'BYhQMzGxHmg', tag: 'Commercial', title: 'Prism', meta: 'Commercial — 2 min', award: 'Clio Gold' },
-  { id: 'eFhx307ykrk', tag: 'Documentary', title: 'Solace', meta: '2024 — 45 min', award: 'IDFA Selection' },
-  { id: 'lya8BHX-8SY', tag: 'Commercial', title: 'Kinetic', meta: 'Fashion Film — 3 min', award: 'Vogue Awards' },
-  { id: 'BG9F0xyy0RI', tag: 'Feature', title: 'Meridian', meta: '2022 — 105 min', award: 'Locarno Silver' },
-  { id: 'hOBJXvR2n_8', tag: 'Short', title: 'Zenith', meta: '2021 — 12 min', award: 'Clermont-Ferrand' },
-  { id: '2Y11kXDacR0', tag: 'Commercial', title: 'Flux', meta: 'Branded Content — 5 min', award: 'D&AD Pencil' },
-  { id: 'WBE9PCT4Qk8', tag: 'Narrative', title: 'Origin', meta: '2021 — 82 min', award: 'Tribeca Winner' },
-  { id: '6_FgbBV43q8', tag: 'Commercial', title: 'Apex', meta: 'Sport Film — 1 min', award: 'One Show' },
-  { id: 'JWqyYj-9Gvs', tag: 'Experimental', title: 'Void', meta: '2024 — 8 min', award: 'SXSW Alt' },
+  { id: 'gJKxIAmhbvg', tag: 'Narrative', title: 'Hawthorn', meta: 'Feature Film — 2024 — 112 min', award: 'Cannes 2024' },
+  { id: 'QdEZtNyJb5g', tag: 'Short', title: 'Vermilion', meta: 'Short Film — 2023 — 28 min', award: 'Sundance 2023' },
+  { id: 'O1p-JVaAQV0', tag: 'Documentary', title: 'Nocturne', meta: 'Documentary — 2023 — 88 min', award: 'Berlin 2023' },
+  { id: 'xTrPSfbWa0w', tag: 'Commercial', title: 'Aureate', meta: 'Brand Film — 2022 — 4 min', award: 'Cannes Lions' },
+  { id: '4UATuJFYKfg', tag: 'Narrative', title: 'Stillwater', meta: 'Feature Film — 2022 — 97 min', award: 'Venice 2022' },
+  { id: 'sroIT5FQMqs', tag: 'Short', title: 'Echoes', meta: 'Short Film — 2023 — 15 min', award: 'TIFF Nominee' },
+  { id: 'BYhQMzGxHmg', tag: 'Commercial', title: 'Prism', meta: 'Commercial — 2023 — 2 min', award: 'Clio Gold' },
+  { id: 'eFhx307ykrk', tag: 'Documentary', title: 'Solace', meta: 'Documentary — 2024 — 45 min', award: 'IDFA Selection' },
+  { id: 'lya8BHX-8SY', tag: 'Commercial', title: 'Kinetic', meta: 'Fashion Film — 2023 — 3 min', award: 'Vogue Awards' },
+  { id: 'BG9F0xyy0RI', tag: 'Feature', title: 'Meridian', meta: 'Feature Film — 2022 — 105 min', award: 'Locarno Silver' },
+  { id: 'hOBJXvR2n_8', tag: 'Short', title: 'Zenith', meta: 'Short Film — 2021 — 12 min', award: 'Clermont-Ferrand' },
+  { id: '2Y11kXDacR0', tag: 'Commercial', title: 'Flux', meta: 'Branded Content — 2023 — 5 min', award: 'D&AD Pencil' },
+  { id: 'WBE9PCT4Qk8', tag: 'Narrative', title: 'Origin', meta: 'Feature Film — 2021 — 82 min', award: 'Tribeca Winner' },
+  { id: '6_FgbBV43q8', tag: 'Commercial', title: 'Apex', meta: 'Sport Film — 2022 — 1 min', award: 'One Show' },
+  { id: 'JWqyYj-9Gvs', tag: 'Experimental', title: 'Void', meta: 'Experimental — 2024 — 8 min', award: 'SXSW Alt' },
 ];
 
 export function VaelFilms() {
-  const getCleanYoutubeUrl = (id: string) => {
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=1`;
+  const getBrandlessYoutubeUrl = (id: string) => {
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`;
   };
 
   return (
@@ -51,6 +51,7 @@ export function VaelFilms() {
                 alt={film.title}
                 fill
                 className="object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
+                data-ai-hint="moody forest"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
               
@@ -71,6 +72,9 @@ export function VaelFilms() {
                 <h3 className="text-2xl md:text-4xl font-headline text-white mb-2 italic">{film.title}</h3>
                 <p className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-body">{film.meta}</p>
               </div>
+              
+              {/* Clean YouTube logo mask */}
+              <div className="absolute top-0 right-0 w-24 h-16 pointer-events-none z-20 bg-transparent" />
             </div>
           )
         })}

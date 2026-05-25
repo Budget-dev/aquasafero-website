@@ -46,44 +46,184 @@ const CustomSlider = ({
 };
 
 const VideoPlayer = ({ src }: { src: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [progress, setProgress] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [showControls, setShowControls] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [mounted, setMounted] = useState(false);
-  const isYouTube = src.includes('youtube.com') || src.includes('youtu.be');
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleVolumeChange = (value: number) => {
+    if (videoRef.current) {
+      const newVolume = value / 100;
+      videoRef.current.volume = newVolume;
+      setVolume(newVolume);
+      setIsMuted(newVolume === 0);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const progress =
+        (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setProgress(isFinite(progress) ? progress : 0);
+      setCurrentTime(videoRef.current.currentTime);
+      setDuration(videoRef.current.duration);
+    }
+  };
+
+  const handleSeek = (value: number) => {
+    if (videoRef.current && videoRef.current.duration) {
+      const time = (value / 100) * videoRef.current.duration;
+      if (isFinite(time)) {
+        videoRef.current.currentTime = time;
+        setProgress(value);
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+      if (!isMuted) {
+        setVolume(0);
+      } else {
+        setVolume(1);
+        videoRef.current.volume = 1;
+      }
+    }
+  };
+
+  const setSpeed = (speed: number) => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = speed;
+      setPlaybackSpeed(speed);
+    }
+  };
+
   if (!mounted) return null;
 
-  if (isYouTube) {
-    let videoId = '';
-    if (src.includes('v=')) {
-      videoId = src.split('v=')[1]?.split('&')[0];
-    } else {
-      videoId = src.split('/').pop()?.split('?')[0] || '';
-    }
-    const embedUrl = `https://www.youtube.com/embed/${videoId}?controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&autoplay=1&mute=1&loop=1&playlist=${videoId}`;
-
-    return (
-      <div className="relative w-full aspect-video overflow-hidden clean-video-wrapper bg-black">
-        <iframe
-          width="100%"
-          height="100%"
-          src={embedUrl}
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          className="scale-[1.05]"
-        />
-        <div className="absolute inset-0 z-10 pointer-events-none" />
-      </div>
-    );
-  }
-
-  // Native Video Player fallback logic preserved
   return (
-    <div className="relative w-full aspect-video bg-black">
-      <video src={src} className="w-full h-full object-cover" controls />
-    </div>
+    <motion.div
+      className="relative w-full mx-auto rounded-none overflow-hidden bg-black shadow-2xl backdrop-blur-sm"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      onMouseEnter={() => setShowControls(true)}
+      onMouseLeave={() => setShowControls(false)}
+    >
+      <video
+        ref={videoRef}
+        className="w-full aspect-video object-cover"
+        onTimeUpdate={handleTimeUpdate}
+        src={src}
+        onClick={togglePlay}
+        playsInline
+      />
+
+      <AnimatePresence>
+        {showControls && (
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 p-4 m-4 bg-black/60 backdrop-blur-md rounded-none border border-white/10"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-white font-body text-[10px] tabular-nums">
+                {formatTime(currentTime)}
+              </span>
+              <CustomSlider
+                value={progress}
+                onChange={handleSeek}
+                className="flex-1"
+              />
+              <span className="text-white font-body text-[10px] tabular-nums">
+                {formatTime(duration)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Button
+                  onClick={togglePlay}
+                  variant="ghost"
+                  size="icon"
+                  className="text-white hover:bg-white/10 rounded-none h-8 w-8"
+                >
+                  {isPlaying ? (
+                    <Pause className="h-4 w-4" />
+                  ) : (
+                    <Play className="h-4 w-4" />
+                  )}
+                </Button>
+                
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={toggleMute}
+                    variant="ghost"
+                    size="icon"
+                    className="text-white hover:bg-white/10 rounded-none h-8 w-8"
+                  >
+                    {isMuted ? (
+                      <VolumeX className="h-4 w-4" />
+                    ) : volume > 0.5 ? (
+                      <Volume2 className="h-4 w-4" />
+                    ) : (
+                      <Volume1 className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <div className="w-20">
+                    <CustomSlider
+                      value={volume * 100}
+                      onChange={handleVolumeChange}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                {[0.5, 1, 1.5, 2].map((speed) => (
+                  <Button
+                    key={speed}
+                    onClick={() => setSpeed(speed)}
+                    variant="ghost"
+                    className={cn(
+                      "text-white text-[9px] hover:bg-white/10 rounded-none h-8 px-2 tracking-widest",
+                      playbackSpeed === speed && "bg-white/20"
+                    )}
+                  >
+                    {speed}x
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

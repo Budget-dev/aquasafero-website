@@ -27,7 +27,7 @@ export function VaelHeader() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-[100] px-8 py-6 md:px-16 md:py-8 flex items-center justify-between bg-background/80 backdrop-blur-md border-b border-border/50">
-      <Link href="/" className="font-headline text-xl tracking-[0.15em] hover:text-primary transition-colors uppercase flex-shrink-0">
+      <Link href="/" className="font-headline text-2xl tracking-[0.15em] hover:text-primary transition-colors uppercase flex-shrink-0">
         erroladitya.com
       </Link>
       

@@ -9,7 +9,7 @@ import {
   WheelEvent,
 } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface ScrollExpandMediaProps {
   mediaType?: 'video' | 'image';
@@ -110,7 +110,6 @@ const ScrollExpandMedia = ({
           setShowContent(false);
         }
       }
-
       setTouchStartY(touchY);
     };
 
@@ -121,7 +120,7 @@ const ScrollExpandMedia = ({
     };
 
     window.addEventListener('wheel', handleWheel as unknown as EventListener, { passive: false });
-    window.addEventListener('scroll', handleScroll as EventListener, { passive: false });
+    window.addEventListener('scroll', handleScroll as EventListener);
     window.addEventListener('touchstart', handleTouchStart as unknown as EventListener, { passive: false });
     window.addEventListener('touchmove', handleTouchMove as unknown as EventListener, { passive: false });
     window.addEventListener('touchend', () => setTouchStartY(0));
@@ -148,143 +147,126 @@ const ScrollExpandMedia = ({
   const firstWord = title ? title.split(' ')[0] : '';
   const restOfTitle = title ? title.split(' ').slice(1).join(' ') : '';
 
-  const isYouTube = mediaSrc.includes('youtube.com') || mediaSrc.includes('youtu.be');
-
   return (
-    <div ref={sectionRef} className='bg-background overflow-x-hidden'>
-      <section className='relative min-h-screen'>
-        {/* Cinematic Background */}
-        <motion.div
-          className='fixed inset-0 z-0 pointer-events-none'
-          style={{ opacity: 1 - scrollProgress }}
-        >
-          <Image
-            src={bgImageSrc}
-            alt='Background'
-            fill
-            className='object-cover grayscale brightness-110 opacity-20'
-            priority
-          />
-        </motion.div>
-
-        <div className='relative flex flex-col items-center justify-center min-h-screen w-full'>
-          {/* Media Container - Sharp Corners */}
-          <div
-            className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl bg-black'
-            style={{
-              width: `${mediaWidth}px`,
-              height: `${mediaHeight}px`,
-              maxWidth: '100vw',
-              maxHeight: '100vh',
-            }}
+    <div ref={sectionRef} className='transition-colors duration-700 ease-in-out overflow-x-hidden'>
+      <section className='relative flex flex-col items-center justify-start min-h-[100dvh]'>
+        <div className='relative w-full flex flex-col items-center min-h-[100dvh]'>
+          <motion.div
+            className='absolute inset-0 z-0 h-full'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 - scrollProgress }}
+            transition={{ duration: 0.1 }}
           >
-            {mediaType === 'video' ? (
-              isYouTube ? (
-                <div className='relative w-full h-full pointer-events-none clean-video-wrapper'>
-                  <iframe
-                    width='100%'
-                    height='100%'
-                    src={`https://www.youtube.com/embed/${mediaSrc.split('v=')[1]?.split('&')[0]}?autoplay=1&mute=1&loop=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`}
-                    className='w-full h-full scale-[1.05]'
-                    frameBorder='0'
-                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  />
+            <Image
+              src={bgImageSrc}
+              alt='Background'
+              fill
+              className='object-cover grayscale brightness-110 opacity-20'
+              priority
+            />
+          </motion.div>
+
+          <div className='container mx-auto flex flex-col items-center justify-start relative z-10'>
+            <div className='flex flex-col items-center justify-center w-full h-[100dvh] relative'>
+              {/* Media Container - Sharp Corners */}
+              <div
+                className='absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-hidden shadow-2xl bg-black rounded-none'
+                style={{
+                  width: `${mediaWidth}px`,
+                  height: `${mediaHeight}px`,
+                  maxWidth: '100vw',
+                  maxHeight: '100vh',
+                }}
+              >
+                {mediaType === 'video' ? (
+                  <div className='relative w-full h-full pointer-events-none'>
+                    <video
+                      src={mediaSrc}
+                      poster={posterSrc}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload='auto'
+                      className='w-full h-full object-cover rounded-none'
+                    />
+                    <motion.div
+                      className='absolute inset-0 bg-black/30'
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: 0.3 - scrollProgress * 0.3 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </div>
+                ) : (
+                  <div className='relative w-full h-full'>
+                    <Image
+                      src={mediaSrc}
+                      alt={title || 'Media content'}
+                      fill
+                      className='object-cover rounded-none grayscale'
+                    />
+                    <motion.div
+                      className='absolute inset-0 bg-black/50'
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </div>
+                )}
+
+                {/* Subtitles Overlay */}
+                <div className='absolute bottom-10 left-0 w-full flex flex-col items-center text-center z-20 pointer-events-none'>
+                  {date && (
+                    <p
+                      className='text-[10px] tracking-[0.6em] uppercase text-primary font-bold mb-4'
+                      style={{ transform: `translateX(-${textTranslateX}vw)` }}
+                    >
+                      {date}
+                    </p>
+                  )}
+                  {scrollToExpand && (
+                    <p
+                      className='text-[10px] tracking-[0.3em] uppercase text-white/60'
+                      style={{ transform: `translateX(${textTranslateX}vw)` }}
+                    >
+                      {scrollToExpand}
+                    </p>
+                  )}
                 </div>
-              ) : (
-                <div className='relative w-full h-full'>
-                  <video
-                    src={mediaSrc}
-                    poster={posterSrc}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload='auto'
-                    className='w-full h-full object-cover'
-                  />
-                </div>
-              )
-            ) : (
-              <div className='relative w-full h-full bg-black'>
-                <Image
-                  src={mediaSrc}
-                  alt={title || 'Media content'}
-                  fill
-                  className='object-cover grayscale'
-                />
               </div>
-            )}
-          </div>
 
-          {/* Titles */}
-          <div className={`relative z-20 flex flex-col items-center text-center px-4 w-full select-none ${textBlend ? "mix-blend-difference" : ""}`}>
-            <motion.div
-              className="flex flex-col items-center justify-center"
-              style={{ y: -scrollProgress * 100 }}
-            >
-              <motion.h1 
-                className="font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] italic text-foreground tracking-tighter"
-                style={{ x: -textTranslateX + 'vw' }}
+              {/* Title Overlay */}
+              <div
+                className={`flex items-center justify-center text-center w-full relative z-20 transition-none flex-col select-none ${
+                  textBlend ? 'mix-blend-difference' : ''
+                }`}
               >
-                {firstWord}
-              </motion.h1>
-              <motion.h1 
-                className="font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] text-primary tracking-tighter"
-                style={{ x: textTranslateX + 'vw' }}
-              >
-                {restOfTitle}
-              </motion.h1>
-            </motion.div>
+                <motion.h1
+                  className='font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] italic text-foreground tracking-tighter'
+                  style={{ transform: `translateX(-${textTranslateX}vw)` }}
+                >
+                  {firstWord}
+                </motion.h1>
+                <motion.h1
+                  className='font-headline text-[clamp(2.5rem,15vw,10rem)] leading-[0.8] text-primary tracking-tighter'
+                  style={{ transform: `translateX(${textTranslateX}vw)` }}
+                >
+                  {restOfTitle}
+                </motion.h1>
+              </div>
+            </div>
 
-            <motion.div 
-              className="mt-16 space-y-4"
-              style={{ opacity: 1 - scrollProgress * 5 }}
-            >
-              {date && (
-                <p className="text-[10px] tracking-[0.6em] uppercase text-primary font-bold">
-                  {date}
-                </p>
-              )}
-              {scrollToExpand && (
-                <p className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
-                  {scrollToExpand}
-                </p>
-              )}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Content Section */}
-        <AnimatePresence>
-          {mediaFullyExpanded && (
-            <motion.div
+            <motion.section
+              className='flex flex-col w-full'
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="relative z-30 bg-background w-full"
+              animate={{ opacity: showContent ? 1 : 0 }}
+              transition={{ duration: 0.7 }}
             >
               {children}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </motion.section>
+          </div>
+        </div>
       </section>
-
-      {/* Scroll Indicator */}
-      {!mediaFullyExpanded && (
-        <motion.div 
-          className="fixed bottom-12 left-1/2 -translate-x-1/2 z-40"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-           <div className="w-[1px] h-12 bg-primary/30 relative overflow-hidden">
-              <motion.div 
-                className="absolute top-0 left-0 w-full h-full bg-primary"
-                animate={{ y: [0, 48, 48] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-           </div>
-        </motion.div>
-      )}
     </div>
   );
 };
