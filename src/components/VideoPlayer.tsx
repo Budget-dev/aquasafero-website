@@ -35,7 +35,7 @@ const CustomSlider = ({
       }}
     >
       <motion.div
-        className="absolute top-0 left-0 h-full bg-primary rounded-full"
+        className="absolute top-0 left-0 h-full bg-white rounded-full"
         style={{ width: `${value}%` }}
         initial={{ width: 0 }}
         animate={{ width: `${value}%` }}
@@ -78,9 +78,9 @@ const VideoPlayer = ({ src }: { src: string }) => {
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      const progressValue =
+      const progress =
         (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      setProgress(isFinite(progressValue) ? progressValue : 0);
+      setProgress(isFinite(progress) ? progress : 0);
       setCurrentTime(videoRef.current.currentTime);
       setDuration(videoRef.current.duration);
     }
@@ -118,7 +118,7 @@ const VideoPlayer = ({ src }: { src: string }) => {
 
   return (
     <motion.div
-      className="relative w-full max-w-4xl mx-auto rounded-xl overflow-hidden bg-black/10 shadow-[0_0_20px_rgba(0,0,0,0.1)] backdrop-blur-sm group"
+      className="relative w-full max-w-4xl mx-auto rounded-none overflow-hidden bg-[#11111198] shadow-[0_0_20px_rgba(0,0,0,0.2)] backdrop-blur-sm"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -136,14 +136,14 @@ const VideoPlayer = ({ src }: { src: string }) => {
       <AnimatePresence>
         {showControls && (
           <motion.div
-            className="absolute bottom-0 mx-auto max-w-xl left-0 right-0 p-4 m-4 bg-black/60 backdrop-blur-md rounded-2xl z-20"
+            className="absolute bottom-0 mx-auto max-w-xl left-0 right-0 p-4 m-2 bg-[#11111198] backdrop-blur-md rounded-2xl"
             initial={{ y: 20, opacity: 0, filter: "blur(10px)" }}
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             exit={{ y: 20, opacity: 0, filter: "blur(10px)" }}
             transition={{ duration: 0.6, ease: "circInOut", type: "spring" }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-white text-[10px] tabular-nums">
+              <span className="text-white text-[10px] font-mono">
                 {formatTime(currentTime)}
               </span>
               <CustomSlider
@@ -151,7 +151,7 @@ const VideoPlayer = ({ src }: { src: string }) => {
                 onChange={handleSeek}
                 className="flex-1"
               />
-              <span className="text-white text-[10px] tabular-nums">{formatTime(duration)}</span>
+              <span className="text-white text-[10px] font-mono">{formatTime(duration)}</span>
             </div>
 
             <div className="flex items-center justify-between">
@@ -164,16 +164,16 @@ const VideoPlayer = ({ src }: { src: string }) => {
                     onClick={togglePlay}
                     variant="ghost"
                     size="icon"
-                    className="text-white hover:bg-white/10 h-8 w-8"
+                    className="text-white hover:bg-[#111111d1] hover:text-white h-8 w-8"
                   >
                     {isPlaying ? (
-                      <Pause className="h-4 w-4" />
+                      <Pause className="h-4 w-4 fill-current" />
                     ) : (
-                      <Play className="h-4 w-4" />
+                      <Play className="h-4 w-4 fill-current" />
                     )}
                   </Button>
                 </motion.div>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-1">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -182,7 +182,7 @@ const VideoPlayer = ({ src }: { src: string }) => {
                       onClick={toggleMute}
                       variant="ghost"
                       size="icon"
-                      className="text-white hover:bg-white/10 h-8 w-8"
+                      className="text-white hover:bg-[#111111d1] hover:text-white h-8 w-8"
                     >
                       {isMuted ? (
                         <VolumeX className="h-4 w-4" />
@@ -203,24 +203,22 @@ const VideoPlayer = ({ src }: { src: string }) => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2">
                 {[0.5, 1, 1.5, 2].map((speed) => (
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     key={speed}
                   >
-                    <Button
+                    <button
                       onClick={() => setSpeed(speed)}
-                      variant="ghost"
-                      size="sm"
                       className={cn(
-                        "text-[9px] text-white hover:bg-white/10 h-7 px-2",
-                        playbackSpeed === speed && "bg-primary text-white"
+                        "text-[9px] font-mono text-white px-2 py-1 rounded transition-colors",
+                        playbackSpeed === speed ? "bg-primary" : "hover:bg-[#111111d1]"
                       )}
                     >
                       {speed}x
-                    </Button>
+                    </button>
                   </motion.div>
                 ))}
               </div>
