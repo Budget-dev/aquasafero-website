@@ -10,9 +10,9 @@ export function VaelFooter() {
       </p>
 
       <div className="flex gap-8 text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
-        <Link href="#" className="hover:text-primary transition-colors">Instagram</Link>
-        <Link href="#" className="hover:text-primary transition-colors">Vimeo</Link>
-        <Link href="#" className="hover:text-primary transition-colors">IMDb</Link>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a>
+        <a href="https://vimeo.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Vimeo</a>
+        <a href="https://imdb.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">IMDb</a>
       </div>
     </footer>
   );
