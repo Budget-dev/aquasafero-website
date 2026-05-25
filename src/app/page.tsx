@@ -1,3 +1,4 @@
+
 import { VaelHeader } from '@/components/VaelHeader';
 import { VaelAbout } from '@/components/VaelAbout';
 import { VaelFilms } from '@/components/VaelFilms';
@@ -6,27 +7,18 @@ import { VaelAwards } from '@/components/VaelAwards';
 import { VaelContact } from '@/components/VaelContact';
 import { VaelFooter } from '@/components/VaelFooter';
 import { VaelPlatforms } from '@/components/VaelPlatforms';
-import ScrollExpandMedia from '@/components/ScrollExpandMedia';
+import { VaelSlider } from '@/components/VaelSlider';
 
 export default function Home() {
-  // Foreground/Middle Box Video
-  const heroVideo = "https://aquasaferoworks.sirv.com/1103193_1080p_Endurance_1280x720.mp4";
-  // Background Video - Cinematic Atmospheric
-  const heroBgVideo = "https://aquasaferoworks.sirv.com/6013655_People_Men_1280x720.mp4";
-  
   return (
-    <main className="relative selection:bg-primary/30 bg-black">
+    <main className="relative selection:bg-primary/30 bg-black min-h-screen">
       <VaelHeader />
       
-      <ScrollExpandMedia
-        mediaType="video"
-        mediaSrc={heroVideo}
-        bgVideoSrc={heroBgVideo}
-        title="Architecture of Emotion"
-        date="2026 Directing Reel"
-        scrollToExpand="Scroll to Experience"
-        textBlend={false}
-      >
+      {/* New Cinematic Hero Slider */}
+      <VaelSlider />
+      
+      {/* Rest of the content scrolls naturally now */}
+      <div className="bg-white">
         <VaelAbout />
         <VaelFilms />
         <VaelReel />
@@ -34,7 +26,7 @@ export default function Home() {
         <VaelAwards />
         <VaelContact />
         <VaelFooter />
-      </ScrollExpandMedia>
+      </div>
       
       {/* Background grain consistent through the site */}
       <div className="fixed inset-0 pointer-events-none grain-overlay z-[200] opacity-5" />
