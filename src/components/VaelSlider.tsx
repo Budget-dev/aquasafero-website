@@ -100,14 +100,14 @@ export function VaelSlider() {
             return (
               <div 
                 key={slide.id} 
-                className="embla__slide flex-[0_0_90%] md:flex-[0_0_75%] min-w-0 px-3 md:px-10 relative"
+                className="embla__slide flex-[0_0_80%] md:flex-[0_0_65%] min-w-0 px-2 md:px-6 relative"
                 onClick={() => setSelectedVideo(slide)}
               >
                 <motion.div
                   initial={false}
                   animate={{ 
-                    scale: isActive ? 1 : 0.94,
-                    opacity: isActive ? 1 : 0.4,
+                    scale: isActive ? 1 : 0.9,
+                    opacity: isActive ? 1 : 0.3,
                   }}
                   transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
                   className="relative aspect-[16/9] md:aspect-[21/10] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] bg-black group cursor-pointer border border-white/5"
