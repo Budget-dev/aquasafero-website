@@ -1,5 +1,4 @@
 import { VaelHeader } from '@/components/VaelHeader';
-import { VaelAbout } from '@/components/VaelAbout';
 import { VaelFilms } from '@/components/VaelFilms';
 import { VaelReel } from '@/components/VaelReel';
 import { VaelAwards } from '@/components/VaelAwards';
@@ -17,7 +16,6 @@ export default function Home() {
       
       {/* Rest of the content scrolls naturally now */}
       <div className="bg-background">
-        <VaelAbout />
         <VaelFilms />
         <VaelReel />
         <VaelAwards />
