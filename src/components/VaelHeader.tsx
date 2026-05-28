@@ -47,8 +47,8 @@ export function VaelHeader() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // YouTube chromeless reel embed
   const reelYoutubeId = "gJKxIAmhbvg";
+  // Optimized Chromeless URL
   const reelUrl = `https://www.youtube.com/embed/${reelYoutubeId}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${reelYoutubeId}&enablejsapi=1`;
 
   return (
@@ -57,7 +57,6 @@ export function VaelHeader() {
         ERROL <span className="text-primary not-italic font-light">ADITYA</span>
       </Link>
       
-      {/* Desktop Navigation */}
       <div className="hidden md:flex items-center justify-center gap-16 font-headline text-[11px] tracking-[0.3em] uppercase italic flex-grow">
         {navLinks.map((link) => (
           <Link 
@@ -77,7 +76,7 @@ export function VaelHeader() {
               Watch Reel
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-6xl bg-black border-none p-0 rounded-none overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none">
+          <DialogContent className="z-[200] max-w-6xl bg-black border border-white/10 p-0 rounded-2xl overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none focus:outline-none">
             <DialogTitle className="sr-only">2026 Directing Reel</DialogTitle>
             <DialogDescription className="sr-only">Cinematic showcase of Errol Aditya's directorial work.</DialogDescription>
             <div className="w-full h-full flex items-center justify-center relative group">
@@ -87,15 +86,16 @@ export function VaelHeader() {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
-              <DialogClose className="absolute top-6 right-6 z-[101] text-white/30 hover:text-white transition-all duration-300 hover:rotate-90">
-                <X className="w-10 h-10" strokeWidth={1} />
+              <DialogClose className="absolute top-6 right-6 z-[201] transition-all duration-300 group/close">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
+                  <X className="w-5 h-5 md:w-6 md:h-6 text-white group-hover/close:text-primary transition-colors" strokeWidth={1.5} />
+                </div>
                 <span className="sr-only">Close Reel</span>
               </DialogClose>
             </div>
           </DialogContent>
         </Dialog>
 
-        {/* Mobile Sidebar */}
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden rounded-none hover:bg-primary/5">

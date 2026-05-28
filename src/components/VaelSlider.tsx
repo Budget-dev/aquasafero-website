@@ -180,7 +180,7 @@ export function VaelSlider() {
                     </div>
                   </div>
 
-                  <DialogClose className="absolute top-6 right-6 z-[80] transition-all duration-300 group/close">
+                  <DialogClose className="absolute top-6 right-6 z-[201] transition-all duration-300 group/close">
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
                       <X className="w-5 h-5 md:w-6 md:h-6 text-white group-hover/close:text-primary transition-colors" strokeWidth={1.5} />
                     </div>

@@ -30,6 +30,7 @@ const VideoCard = ({ video, aspectRatio, className = "", onClick }: VideoCardPro
   const [isHovered, setIsHovered] = useState(false);
 
   const getPreviewUrl = (id: string) => {
+    // Optimized Chromeless URL for previews
     return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
@@ -79,32 +80,38 @@ export function VaelReel() {
   };
 
   const getFullUrl = (id: string) => {
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0`;
+    // Optimized Chromeless URL for full view
+    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
   return (
     <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
       <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:space-y-8">
         
+        {/* Row 1 -> 2 horizontal video cards */}
         <div className="grid grid-cols-2 gap-4 md:gap-8">
           <VideoCard video={videos.h1} aspectRatio="aspect-video" onClick={setSelectedVideo} />
           <VideoCard video={videos.h2} aspectRatio="aspect-video" onClick={setSelectedVideo} />
         </div>
 
+        {/* Row 2 -> 2 horizontal video cards */}
         <div className="grid grid-cols-2 gap-4 md:gap-8">
           <VideoCard video={videos.h3} aspectRatio="aspect-video" onClick={setSelectedVideo} />
           <VideoCard video={videos.h4} aspectRatio="aspect-video" onClick={setSelectedVideo} />
         </div>
 
+        {/* Row 3 -> 1 large featured video section */}
         <div className="w-full">
           <VideoCard video={videos.f1} aspectRatio="aspect-[21/9]" onClick={setSelectedVideo} />
         </div>
 
+        {/* Row 4 -> 2 medium video cards */}
         <div className="grid grid-cols-2 gap-4 md:gap-8">
           <VideoCard video={videos.m1} aspectRatio="aspect-[16/10]" onClick={setSelectedVideo} />
           <VideoCard video={videos.m2} aspectRatio="aspect-[16/10]" onClick={setSelectedVideo} />
         </div>
 
+        {/* Row 5 -> 4 vertical reel-style video cards */}
         <div className="grid grid-cols-4 gap-2 md:gap-8">
           <VideoCard video={videos.v1} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           <VideoCard video={videos.v2} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
@@ -142,14 +149,14 @@ export function VaelReel() {
                     allowFullScreen
                   />
 
-                  <div className="absolute top-6 left-8 z-[70] pointer-events-none drop-shadow-lg">
+                  <div className="absolute top-6 left-8 z-[210] pointer-events-none drop-shadow-lg">
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] tracking-[0.4em] text-primary uppercase font-bold">{selectedVideo.category}</span>
                       <span className="text-2xl md:text-3xl tracking-tight text-white italic font-headline">{selectedVideo.title}</span>
                     </div>
                   </div>
 
-                  <DialogClose className="absolute top-6 right-6 z-[80] transition-all duration-300 group/close">
+                  <DialogClose className="absolute top-6 right-6 z-[220] transition-all duration-300 group/close">
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
                       <X className="w-5 h-5 md:w-6 md:h-6 text-white group-hover/close:text-primary transition-colors" strokeWidth={1.5} />
                     </div>
