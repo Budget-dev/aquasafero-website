@@ -30,7 +30,6 @@ const VideoCard = ({ video, aspectRatio, className = "", onClick }: VideoCardPro
   const [isHovered, setIsHovered] = useState(false);
 
   const getPreviewUrl = (id: string) => {
-    // Optimized Chromeless URL for previews
     return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
@@ -76,11 +75,9 @@ export function VaelReel() {
     v1: { id: "eFhx307ykrk", title: "Solace", category: "Documentary" },
     v2: { id: "lya8BHX-8SY", title: "Kinetic", category: "Fashion" },
     v3: { id: "4UATuJFYKfg", title: "Stillwater (Vert)", category: "Feature" },
-    v4: { id: "gJKxIAmhbvg", title: "Hawthorn (Vert)", category: "Narrative" },
   };
 
   const getFullUrl = (id: string) => {
-    // Optimized Chromeless URL for full view
     return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
@@ -111,12 +108,11 @@ export function VaelReel() {
           <VideoCard video={videos.m2} aspectRatio="aspect-[16/10]" onClick={setSelectedVideo} />
         </div>
 
-        {/* Row 5 -> 4 vertical reel-style video cards */}
-        <div className="grid grid-cols-4 gap-2 md:gap-8">
+        {/* Row 5 -> 3 vertical reel-style video cards (Updated from 4) */}
+        <div className="grid grid-cols-3 gap-2 md:gap-8">
           <VideoCard video={videos.v1} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           <VideoCard video={videos.v2} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           <VideoCard video={videos.v3} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
-          <VideoCard video={videos.v4} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
         </div>
         
       </div>

@@ -32,7 +32,7 @@ const slides: SlideItem[] = [
     category: 'directed by errol aditya',
     role: 'DIRECTOR / VISIONARY',
     imageUrl: 'https://picsum.photos/seed/slide1/1200/800',
-    youtubeId: 'gJKxIAmhbvg',
+    youtubeId: 'NWPzwV3le50',
   },
   {
     id: '2',
@@ -40,7 +40,7 @@ const slides: SlideItem[] = [
     category: 'visual narrative',
     role: 'CINEMATOGRAPHER',
     imageUrl: 'https://picsum.photos/seed/slide2/1200/800',
-    youtubeId: 'QdEZtNyJb5g',
+    youtubeId: 'lhdHDEhtMiI',
   },
   {
     id: '3',
@@ -48,15 +48,7 @@ const slides: SlideItem[] = [
     category: 'cinematography',
     role: 'DIRECTOR / VISIONARY',
     imageUrl: 'https://picsum.photos/seed/slide3/1200/800',
-    youtubeId: 'O1p-JVaAQV0',
-  },
-  {
-    id: '4',
-    title: 'AUREATE',
-    category: 'commissioned cinema',
-    role: 'CREATIVE DIRECTOR',
-    imageUrl: 'https://picsum.photos/seed/slide4/1200/800',
-    youtubeId: 'xTrPSfbWa0w',
+    youtubeId: 'nHSssoiMRE4',
   },
 ];
 
@@ -86,14 +78,14 @@ export function VaelSlider() {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  const getYoutubeEmbed = (id: string, isSelected: boolean, isModal: boolean = false) => {
+  const getYoutubeEmbed = (id: string, isActive: boolean, isModal: boolean = false) => {
     const base = `https://www.youtube.com/embed/${id}`;
-    const params = `?autoplay=${isSelected || isModal ? 1 : 0}&mute=${isModal ? 0 : 1}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
+    const params = `?autoplay=${isActive || isModal ? 1 : 0}&mute=${isModal ? 0 : 1}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
     return base + params;
   };
 
   return (
-    <section className="relative w-full bg-background pt-32 pb-24 md:pt-48 md:pb-40 min-h-[90vh] flex flex-col justify-center overflow-hidden select-none">
+    <section className="relative w-full bg-background pt-32 pb-24 md:pt-48 md:pb-40 min-h-[100vh] flex flex-col justify-center overflow-hidden select-none">
       <div className="embla overflow-visible" ref={emblaRef}>
         <div className="embla__container flex">
           {slides.map((slide, index) => {
