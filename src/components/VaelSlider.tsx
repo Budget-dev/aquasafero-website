@@ -86,13 +86,12 @@ export function VaelSlider() {
 
   const getYoutubeEmbed = (id: string, isSelected: boolean, isModal: boolean = false) => {
     const base = `https://www.youtube.com/embed/${id}`;
-    // Completely chromeless params
     const params = `?autoplay=${isSelected || isModal ? 1 : 0}&mute=${isModal ? 0 : 1}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
     return base + params;
   };
 
   return (
-    <section className="relative w-full bg-background pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden select-none">
+    <section className="relative w-full bg-background pt-32 pb-24 md:pt-48 md:pb-40 min-h-[85vh] flex flex-col justify-center overflow-hidden select-none">
       <div className="embla overflow-visible" ref={emblaRef}>
         <div className="embla__container flex">
           {slides.map((slide, index) => {
@@ -101,19 +100,19 @@ export function VaelSlider() {
             return (
               <div 
                 key={slide.id} 
-                className="embla__slide flex-[0_0_75%] md:flex-[0_0_40%] min-w-0 px-2 md:px-6 relative"
+                className="embla__slide flex-[0_0_85%] md:flex-[0_0_60%] min-w-0 px-4 md:px-10 relative"
                 onClick={() => setSelectedVideo(slide)}
               >
                 <motion.div
                   initial={false}
                   animate={{ 
-                    scale: isActive ? 1 : 0.85,
-                    opacity: isActive ? 1 : 0.3,
+                    scale: isActive ? 1 : 0.9,
+                    opacity: isActive ? 1 : 0.4,
                   }}
-                  transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
-                  className="relative aspect-[16/9] md:aspect-[21/10] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] bg-black group cursor-pointer border border-white/5"
+                  transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+                  className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] bg-black group cursor-pointer border border-white/5"
                 >
-                  <div className="absolute inset-0 pointer-events-none transform scale-[1.3]">
+                  <div className="absolute inset-0 pointer-events-none transform scale-[1.4]">
                     <iframe
                       className="w-full h-full"
                       src={getYoutubeEmbed(slide.youtubeId, isActive)}
@@ -122,12 +121,12 @@ export function VaelSlider() {
                     />
                   </div>
                   
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-                  <div className="absolute inset-0 cinematic-vignette opacity-50 z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10" />
+                  <div className="absolute inset-0 cinematic-vignette opacity-60 z-10" />
 
                   <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border border-white/10 bg-black/20 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-primary/20 hover:border-primary/40">
-                      <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white ml-1" />
+                    <div className="w-20 h-20 md:w-32 md:h-32 rounded-full border border-white/10 bg-black/30 backdrop-blur-md flex items-center justify-center transition-all duration-500 hover:scale-110 hover:bg-primary/20 hover:border-primary/40">
+                      <Play className="w-8 h-8 md:w-12 md:h-12 text-white fill-white ml-2" />
                     </div>
                   </div>
                 </motion.div>
@@ -137,14 +136,14 @@ export function VaelSlider() {
         </div>
       </div>
 
-      <div className="flex justify-center gap-4 mt-12 md:mt-16">
+      <div className="flex justify-center gap-6 mt-16 md:mt-24">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => emblaApi?.scrollTo(i)}
             className={cn(
-              "h-0.5 transition-all duration-1000",
-              selectedIndex === i ? "w-24 bg-primary" : "w-12 bg-border hover:bg-muted-foreground/40"
+              "h-1 transition-all duration-1000 rounded-full",
+              selectedIndex === i ? "w-32 bg-primary" : "w-16 bg-border hover:bg-muted-foreground/40"
             )}
             aria-label={`Go to slide ${i + 1}`}
           />
