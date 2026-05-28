@@ -102,7 +102,7 @@ export function VaelSlider() {
             return (
               <div 
                 key={slide.id} 
-                className="embla__slide flex-[0_0_85%] md:flex-[0_0_60%] min-w-0 px-4 md:px-10 relative"
+                className="embla__slide flex-[0_0_80%] md:flex-[0_0_55%] min-w-0 px-4 md:px-10 relative"
                 onClick={() => setSelectedVideo(slide)}
               >
                 <motion.div
@@ -112,7 +112,7 @@ export function VaelSlider() {
                     opacity: isActive ? 1 : 0.4,
                   }}
                   transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-                  className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] bg-black group cursor-pointer border border-white/5 rounded-2xl"
+                  className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9)] bg-black group cursor-pointer border border-white/5 rounded-none"
                 >
                   <div className="absolute inset-0 pointer-events-none transform scale-[1.4]">
                     <iframe
@@ -138,7 +138,7 @@ export function VaelSlider() {
             key={i}
             onClick={() => emblaApi?.scrollTo(i)}
             className={cn(
-              "h-1 transition-all duration-1000 rounded-full",
+              "h-1 transition-all duration-1000 rounded-none",
               selectedIndex === i ? "w-32 bg-primary" : "w-16 bg-border hover:bg-muted-foreground/40"
             )}
             aria-label={`Go to slide ${i + 1}`}
@@ -149,7 +149,7 @@ export function VaelSlider() {
       <Dialog open={!!selectedVideo} onOpenChange={(open) => !open && setSelectedVideo(null)}>
         <DialogPortal>
           <DialogOverlay className="z-[190] bg-black/90 backdrop-blur-xl" />
-          <DialogContent className="z-[200] max-w-[95vw] md:max-w-6xl bg-black border border-white/10 p-0 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] rounded-2xl aspect-video focus:outline-none">
+          <DialogContent className="z-[200] max-w-[95vw] md:max-w-6xl bg-black border border-white/10 p-0 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,1)] rounded-none aspect-video focus:outline-none">
             <DialogTitle className="sr-only">
               {selectedVideo?.title} — {selectedVideo?.category}
             </DialogTitle>
@@ -181,7 +181,7 @@ export function VaelSlider() {
                   </div>
 
                   <DialogClose className="absolute top-6 right-6 z-[201] transition-all duration-300 group/close">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-none bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
                       <X className="w-5 h-5 md:w-6 md:h-6 text-white group-hover/close:text-primary transition-colors" strokeWidth={1.5} />
                     </div>
                     <span className="sr-only">Close Player</span>
