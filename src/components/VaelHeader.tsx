@@ -20,8 +20,7 @@ import { Menu, X } from 'lucide-react';
 import VideoPlayer from '@/components/VideoPlayer';
 
 const navLinks = [
-  { href: '#about', label: 'The Narrative' },
-  { href: '#work', label: 'Filmography' },
+  { href: '#reel', label: 'Work Reel' },
   { href: '#awards', label: 'Honors' },
   { href: '#contact', label: 'Inquiry' },
 ];
@@ -33,7 +32,7 @@ export function VaelHeader() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      const sections = ['about', 'work', 'awards', 'contact'];
+      const sections = ['reel', 'awards', 'contact'];
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
