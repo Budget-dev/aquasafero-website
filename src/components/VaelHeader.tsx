@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 import { Menu, X } from 'lucide-react';
 
@@ -51,12 +53,12 @@ export function VaelHeader() {
   const reelUrl = `https://www.youtube.com/embed/${reelYoutubeId}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${reelYoutubeId}&enablejsapi=1`;
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-between ${isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-border/40 py-4 shadow-sm' : 'bg-transparent'}`}>
-      <Link href="/" className="font-headline text-2xl md:text-4xl tracking-tighter hover:text-primary transition-all duration-700 flex-shrink-0 italic font-bold">
+    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-between ${isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-white/5 py-4 shadow-2xl' : 'bg-transparent'}`}>
+      <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 flex-shrink-0 italic font-bold">
         ERROL <span className="text-primary not-italic font-light">ADITYA</span>
       </Link>
       
-      <div className="hidden md:flex items-center justify-center gap-16 font-headline text-[13px] tracking-[0.3em] uppercase italic font-bold flex-grow">
+      <div className="hidden md:flex items-center justify-center gap-12 font-headline text-[12px] tracking-[0.25em] uppercase italic font-bold flex-grow">
         {navLinks.map((link) => (
           <Link 
             key={link.href}
@@ -68,14 +70,14 @@ export function VaelHeader() {
         ))}
       </div>
 
-      <div className="flex-shrink-0 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8 transition-all duration-300 transform hover:-translate-y-0.5">
               Watch Reel
             </Button>
           </DialogTrigger>
-          <DialogContent className="z-[200] max-w-6xl bg-black border border-white/10 p-0 rounded-none overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none focus:outline-none">
+          <DialogContent className="z-[250] max-w-6xl bg-black border border-white/10 p-0 rounded-none overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none focus:outline-none">
             <DialogTitle className="sr-only">2026 Directing Reel</DialogTitle>
             <DialogDescription className="sr-only">Cinematic showcase of Errol Aditya's directorial work.</DialogDescription>
             <div className="w-full h-full flex items-center justify-center relative group">
@@ -97,35 +99,80 @@ export function VaelHeader() {
 
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden rounded-none hover:bg-primary/5">
+            <Button variant="ghost" size="icon" className="md:hidden rounded-none hover:bg-white/5 h-10 w-10">
               <Menu className="w-6 h-6 text-foreground" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="bg-black border-none p-12 w-[85vw] flex flex-col justify-between rounded-none">
-            <div className="space-y-16">
-              <div className="font-headline text-2xl tracking-tighter italic text-white font-bold">
+          <SheetContent side="right" className="bg-black/95 backdrop-blur-2xl border-l border-white/5 p-0 w-full sm:max-w-md flex flex-col rounded-none z-[300]">
+            {/* Mobile Nav Top Bar */}
+            <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
+              <div className="font-headline text-xl tracking-tighter italic text-white font-bold">
                 ERROL <span className="text-primary not-italic font-light">ADITYA</span>
               </div>
-              <div className="flex flex-col gap-10 font-headline text-[15px] tracking-[0.2em] uppercase text-white/70 italic font-bold">
-                {navLinks.map((link) => (
-                  <Link 
-                    key={link.href}
-                    href={link.href} 
-                    className="hover:text-primary transition-colors border-b border-border/40 pb-6"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+              <SheetClose className="w-10 h-10 rounded-none bg-white/5 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                <X className="w-5 h-5 text-white" />
+              </SheetClose>
             </div>
-            <div className="space-y-8">
-              <Button variant="outline" className="w-full rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[11px] tracking-[0.2em] uppercase h-auto py-5">
-                Watch Reel
-              </Button>
-              <div className="flex gap-8 text-[11px] tracking-widest text-muted-foreground uppercase justify-center">
-                <Link href="#">IG</Link>
-                <Link href="#">VM</Link>
-                <Link href="#">IM</Link>
+
+            <div className="flex-1 flex flex-col justify-center px-8 space-y-2">
+              <nav className="flex flex-col">
+                {navLinks.map((link, idx) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * idx, duration: 0.5 }}
+                    className="border-b border-white/5"
+                  >
+                    <SheetClose asChild>
+                      <Link 
+                        href={link.href} 
+                        className="flex items-center justify-between py-6 group"
+                      >
+                        <span className="font-headline text-2xl tracking-[0.05em] uppercase text-white/70 italic font-bold group-hover:text-primary transition-colors">
+                          {link.label}
+                        </span>
+                        <div className="w-2 h-2 bg-primary transform scale-0 group-hover:scale-100 transition-transform duration-300" />
+                      </Link>
+                    </SheetClose>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className="pt-12"
+              >
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[11px] tracking-[0.2em] uppercase h-auto py-5 transition-all">
+                      Watch Reel
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="z-[350] w-[95vw] sm:max-w-4xl bg-black border border-white/10 p-0 rounded-none aspect-video">
+                    <DialogTitle className="sr-only">Director Reel</DialogTitle>
+                    <div className="relative w-full h-full">
+                       <iframe className="w-full h-full" src={reelUrl} frameBorder="0" allowFullScreen />
+                       <DialogClose className="absolute top-4 right-4 bg-black/50 p-2">
+                          <X className="w-5 h-5 text-white" />
+                       </DialogClose>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </motion.div>
+            </div>
+
+            {/* Socials & Footer */}
+            <div className="px-8 py-10 border-t border-white/5 bg-white/[0.02]">
+              <div className="flex flex-col gap-6">
+                <span className="text-[9px] tracking-[0.4em] uppercase text-white/40 block text-center">Social Connect</span>
+                <div className="flex justify-between items-center text-[10px] tracking-[0.3em] uppercase text-white/60 font-bold italic">
+                  <a href="#" className="hover:text-primary transition-colors">Instagram</a>
+                  <a href="#" className="hover:text-primary transition-colors">Vimeo</a>
+                  <a href="#" className="hover:text-primary transition-colors">IMDb</a>
+                </div>
               </div>
             </div>
           </SheetContent>
