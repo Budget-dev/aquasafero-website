@@ -44,7 +44,7 @@ const VideoCard = ({ video, aspectRatio, className = "", onClick }: VideoCardPro
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
     >
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <iframe
           className={`w-full h-full scale-[1.3] transition-transform duration-1000 ease-out ${isHovered ? 'scale-[1.4]' : ''}`}
           src={getPreviewUrl(video.id)}
@@ -75,9 +75,9 @@ export function VaelReel() {
     f1: { id: "4UATuJFYKfg", title: "Stillwater", category: "Feature" },
     m1: { id: "sroIT5FQMqs", title: "Echoes", category: "Experimental" },
     m2: { id: "BYhQMzGxHmg", title: "Prism", category: "Brand Story" },
-    v1: { id: "NWPzwV3le50", title: "Vision Narrative", category: "Director Reel" },
-    v2: { id: "lhdHDEhtMiI", title: "Kinetic Study", category: "Director Reel" },
-    v3: { id: "nHSssoiMRE4", title: "Atmosphere", category: "Director Reel" },
+    v1: { id: "NWPzwV3le50", title: "Vision Narrative", category: "Vertical Reel" },
+    v2: { id: "lhdHDEhtMiI", title: "Kinetic Study", category: "Vertical Reel" },
+    v3: { id: "nHSssoiMRE4", title: "Atmosphere", category: "Vertical Reel" },
   };
 
   const getFullUrl = (id: string) => {
@@ -111,8 +111,8 @@ export function VaelReel() {
           <VideoCard video={videos.m2} aspectRatio="aspect-[16/10]" onClick={setSelectedVideo} />
         </div>
 
-        {/* Row 5 -> 3 vertical reel-style video cards (User-provided IDs) */}
-        <div className="grid grid-cols-3 gap-2 md:gap-8">
+        {/* Row 5 -> 3 vertical reel-style video cards (Your requested specific vertical projects) */}
+        <div className="grid grid-cols-3 gap-4 md:gap-8">
           <VideoCard video={videos.v1} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           <VideoCard video={videos.v2} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           <VideoCard video={videos.v3} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
@@ -151,7 +151,7 @@ export function VaelReel() {
                   <div className="absolute top-6 left-8 z-[210] pointer-events-none drop-shadow-lg">
                     <div className="flex flex-col gap-1">
                       <span className="text-[10px] tracking-[0.4em] text-primary uppercase font-bold">{selectedVideo.category}</span>
-                      <span className="text-2xl md:text-3xl tracking-tight text-white italic font-headline">{selectedVideo.title}</span>
+                      <span className="text-2xl md:text-3xl tracking-tight text-white italic font-headline font-bold">{selectedVideo.title}</span>
                     </div>
                   </div>
 

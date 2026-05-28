@@ -53,11 +53,11 @@ export function VaelHeader() {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-between ${isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-border/40 py-4 shadow-sm' : 'bg-transparent'}`}>
-      <Link href="/" className="font-headline text-2xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 flex-shrink-0 italic font-bold">
+      <Link href="/" className="font-headline text-2xl md:text-4xl tracking-tighter hover:text-primary transition-all duration-700 flex-shrink-0 italic font-bold">
         ERROL <span className="text-primary not-italic font-light">ADITYA</span>
       </Link>
       
-      <div className="hidden md:flex items-center justify-center gap-16 font-headline text-[11px] tracking-[0.3em] uppercase italic flex-grow">
+      <div className="hidden md:flex items-center justify-center gap-16 font-headline text-[13px] tracking-[0.3em] uppercase italic font-bold flex-grow">
         {navLinks.map((link) => (
           <Link 
             key={link.href}
@@ -72,11 +72,11 @@ export function VaelHeader() {
       <div className="flex-shrink-0 flex items-center gap-4">
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8 transition-all duration-300 transform hover:-translate-y-0.5">
+            <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8 transition-all duration-300 transform hover:-translate-y-0.5">
               Watch Reel
             </Button>
           </DialogTrigger>
-          <DialogContent className="z-[200] max-w-6xl bg-black border border-white/10 p-0 rounded-2xl overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none focus:outline-none">
+          <DialogContent className="z-[200] max-w-6xl bg-black border border-white/10 p-0 rounded-none overflow-hidden aspect-video shadow-[0_0_120px_rgba(0,0,0,1)] outline-none focus:outline-none">
             <DialogTitle className="sr-only">2026 Directing Reel</DialogTitle>
             <DialogDescription className="sr-only">Cinematic showcase of Errol Aditya's directorial work.</DialogDescription>
             <div className="w-full h-full flex items-center justify-center relative group">
@@ -87,7 +87,7 @@ export function VaelHeader() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
               <DialogClose className="absolute top-6 right-6 z-[201] transition-all duration-300 group/close">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-none bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center group-hover/close:border-primary/50 group-hover/close:scale-110 transition-all">
                   <X className="w-5 h-5 md:w-6 md:h-6 text-white group-hover/close:text-primary transition-colors" strokeWidth={1.5} />
                 </div>
                 <span className="sr-only">Close Reel</span>
@@ -102,12 +102,12 @@ export function VaelHeader() {
               <Menu className="w-6 h-6 text-foreground" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="bg-black border-none p-12 w-[85vw] flex flex-col justify-between">
+          <SheetContent side="right" className="bg-black border-none p-12 w-[85vw] flex flex-col justify-between rounded-none">
             <div className="space-y-16">
               <div className="font-headline text-2xl tracking-tighter italic text-white font-bold">
                 ERROL <span className="text-primary not-italic font-light">ADITYA</span>
               </div>
-              <div className="flex flex-col gap-10 font-headline text-[13px] tracking-[0.2em] uppercase text-white/70 italic">
+              <div className="flex flex-col gap-10 font-headline text-[15px] tracking-[0.2em] uppercase text-white/70 italic font-bold">
                 {navLinks.map((link) => (
                   <Link 
                     key={link.href}
@@ -120,7 +120,7 @@ export function VaelHeader() {
               </div>
             </div>
             <div className="space-y-8">
-              <Button variant="outline" className="w-full rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic text-[11px] tracking-[0.2em] uppercase h-auto py-5">
+              <Button variant="outline" className="w-full rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[11px] tracking-[0.2em] uppercase h-auto py-5">
                 Watch Reel
               </Button>
               <div className="flex gap-8 text-[11px] tracking-widest text-muted-foreground uppercase justify-center">
