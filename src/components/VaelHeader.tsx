@@ -17,6 +17,8 @@ import {
   SheetContent,
   SheetTrigger,
   SheetClose,
+  SheetTitle,
+  SheetDescription,
 } from '@/components/ui/sheet';
 import { Menu, X } from 'lucide-react';
 
@@ -104,6 +106,9 @@ export function VaelHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="bg-black/95 backdrop-blur-2xl border-l border-white/5 p-0 w-full sm:max-w-md flex flex-col rounded-none z-[300]">
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+            <SheetDescription className="sr-only">Access links to work, awards, and contact information.</SheetDescription>
+            
             {/* Mobile Nav Top Bar */}
             <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
               <div className="font-headline text-xl tracking-tighter italic text-white font-bold">
@@ -151,11 +156,12 @@ export function VaelHeader() {
                       Watch Reel
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="z-[350] w-[95vw] sm:max-w-4xl bg-black border border-white/10 p-0 rounded-none aspect-video">
+                  <DialogContent className="z-[350] w-[95vw] sm:max-w-4xl bg-black border border-white/10 p-0 rounded-none aspect-video shadow-2xl">
                     <DialogTitle className="sr-only">Director Reel</DialogTitle>
+                    <DialogDescription className="sr-only">Watch the 2026 directing reel for Errol Aditya.</DialogDescription>
                     <div className="relative w-full h-full">
                        <iframe className="w-full h-full" src={reelUrl} frameBorder="0" allowFullScreen />
-                       <DialogClose className="absolute top-4 right-4 bg-black/50 p-2">
+                       <DialogClose className="absolute top-4 right-4 bg-black/50 p-2 hover:bg-black/70 transition-colors">
                           <X className="w-5 h-5 text-white" />
                        </DialogClose>
                     </div>
