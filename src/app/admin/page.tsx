@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -38,6 +37,7 @@ export default function AdminPage() {
     order: 0
   });
 
+  // Simple query to avoid composite index requirements
   const videosQuery = useMemoFirebase(() => {
     if (!firestore) return null;
     return query(collection(firestore, 'videos'), orderBy('order', 'asc'));
@@ -47,10 +47,10 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (videosError) {
-      console.error("Firestore access error:", videosError);
+      console.error("Firestore connection error:", videosError);
       toast({ 
-        title: "Connection Error", 
-        description: "Failed to connect to the archive. Please check your Firebase configuration.", 
+        title: "Database Error", 
+        description: "Could not sync with the archive. Check your Firestore Security Rules.", 
         variant: "destructive" 
       });
     }
@@ -65,7 +65,7 @@ export default function AdminPage() {
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firestore) {
-      toast({ title: "Error", description: "Firebase is not initialized.", variant: "destructive" });
+      toast({ title: "Error", description: "Database connection not ready.", variant: "destructive" });
       return;
     }
     
@@ -80,7 +80,7 @@ export default function AdminPage() {
         createdAt: serverTimestamp()
       });
       
-      toast({ title: "Success", description: `${formData.title} added to archive.` });
+      toast({ title: "Film Published", description: `${formData.title} is now live in the archive.` });
       
       setFormData({
         title: '',
@@ -93,8 +93,8 @@ export default function AdminPage() {
         order: (videos?.length || 0) + 1
       });
     } catch (error: any) {
-      console.error('Error adding video:', error);
-      toast({ title: "Failed", description: error.message, variant: "destructive" });
+      console.error('Error adding film:', error);
+      toast({ title: "Publishing Failed", description: error.message, variant: "destructive" });
     } finally {
       setIsAdding(false);
     }
@@ -107,12 +107,12 @@ export default function AdminPage() {
     try {
       const batch = writeBatch(firestore);
       const defaultProjects = [
-        { title: 'HAWTHORN', youtubeId: 'NWPzwV3le50', type: 'slider', role: 'Director', category: 'Narrative', order: 1 },
-        { title: 'VERMILION', youtubeId: 'lhdHDEhtMiI', type: 'slider', role: 'Director', category: 'Commercial', order: 2 },
-        { title: 'NOCTURNE', youtubeId: 'nHSssoiMRE4', type: 'slider', role: 'Director', category: 'Documentary', order: 3 },
-        { title: 'VERTICAL ONE', youtubeId: 'NWPzwV3le50', type: 'reel-vertical', role: 'Director', category: 'Fashion', order: 4 },
-        { title: 'VERTICAL TWO', youtubeId: 'lhdHDEhtMiI', type: 'reel-vertical', role: 'Director', category: 'Lifestyle', order: 5 },
-        { title: 'VERTICAL THREE', youtubeId: 'nHSssoiMRE4', type: 'reel-vertical', role: 'Director', category: 'Art', order: 6 },
+        { title: 'HAWTHORN', youtubeId: 'NWPzwV3le50', type: 'slider', role: 'Director', category: 'Narrative', order: 1, meta: '2024 • ARRI ALEXA LF' },
+        { title: 'VERMILION', youtubeId: 'lhdHDEhtMiI', type: 'slider', role: 'Director', category: 'Commercial', order: 2, meta: '2024 • 35MM FILM' },
+        { title: 'NOCTURNE', youtubeId: 'nHSssoiMRE4', type: 'slider', role: 'Director', category: 'Documentary', order: 3, meta: '2023 • 16MM KODAK' },
+        { title: 'VERTICAL ONE', youtubeId: 'NWPzwV3le50', type: 'reel-vertical', role: 'Director', category: 'Fashion', order: 4, meta: 'MUMBAI' },
+        { title: 'VERTICAL TWO', youtubeId: 'lhdHDEhtMiI', type: 'reel-vertical', role: 'Director', category: 'Lifestyle', order: 5, meta: 'LONDON' },
+        { title: 'VERTICAL THREE', youtubeId: 'nHSssoiMRE4', type: 'reel-vertical', role: 'Director', category: 'Art', order: 6, meta: 'NYC' },
       ];
 
       defaultProjects.forEach(proj => {
@@ -121,7 +121,7 @@ export default function AdminPage() {
       });
       
       await batch.commit();
-      toast({ title: "Seeded", description: "Archive populated." });
+      toast({ title: "Showcase Seeded", description: "6 flagship films synchronized successfully." });
     } catch (error: any) {
       toast({ title: "Seed Failed", description: error.message, variant: "destructive" });
     } finally {
@@ -130,12 +130,12 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!firestore || !confirm('Delete this project?')) return;
+    if (!firestore || !confirm('Permanently remove this film from the public archive?')) return;
     try {
       await deleteDoc(doc(firestore, 'videos', id));
-      toast({ title: "Deleted", description: "Entry removed." });
+      toast({ title: "Film Removed", description: "Entry purged from archive." });
     } catch (error: any) {
-      toast({ title: "Delete Failed", description: error.message, variant: "destructive" });
+      toast({ title: "Removal Failed", description: error.message, variant: "destructive" });
     }
   };
 
@@ -144,11 +144,12 @@ export default function AdminPage() {
       <VaelHeader />
       
       <div className="flex pt-24 min-h-screen">
+        {/* Sidebar Form */}
         <aside className="w-80 border-r border-white/5 bg-card/20 hidden lg:flex flex-col sticky top-24 h-[calc(100vh-6rem)] p-8 overflow-y-auto">
           <div className="mb-10">
-            <h2 className="text-[10px] tracking-[0.5em] uppercase text-primary font-bold mb-4">Archive Manager</h2>
+            <h2 className="text-[10px] tracking-[0.5em] uppercase text-primary font-bold mb-4">Archive Management</h2>
             <p className="text-muted-foreground text-[11px] leading-relaxed uppercase tracking-wider">
-              Control center for the cinematic archive. Add and categorize films directly.
+              Publish new works directly to the cinematic archive.
             </p>
           </div>
 
@@ -185,10 +186,10 @@ export default function AdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">YouTube ID or URL</Label>
+                <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">YouTube URL or ID</Label>
                 <Input 
                   required
-                  placeholder="Paste URL or ID..." 
+                  placeholder="Paste YouTube Link..." 
                   className="rounded-none bg-background border-white/10 h-11"
                   value={formData.youtubeId}
                   onChange={e => setFormData({...formData, youtubeId: e.target.value})}
@@ -197,7 +198,7 @@ export default function AdminPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Category/Tag</Label>
+                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Category</Label>
                   <Input 
                     placeholder="Narrative..." 
                     className="rounded-none bg-background border-white/10 h-11"
@@ -206,7 +207,7 @@ export default function AdminPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Order</Label>
+                  <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Sequence Order</Label>
                   <Input 
                     type="number"
                     className="rounded-none bg-background border-white/10 h-11"
@@ -223,7 +224,7 @@ export default function AdminPage() {
               className="w-full rounded-none bg-primary text-primary-foreground py-6 h-auto text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-all"
             >
               {isAdding ? <Loader2 className="animate-spin w-4 h-4" /> : <Plus className="mr-2 w-4 h-4" />}
-              {isAdding ? 'Publishing...' : 'Publish Film'}
+              {isAdding ? 'Synchronizing...' : 'Publish Film'}
             </Button>
           </form>
 
@@ -235,11 +236,12 @@ export default function AdminPage() {
               className="w-full rounded-none border-primary/20 text-primary/60 hover:text-primary hover:border-primary py-4 h-auto text-[9px] tracking-[0.2em] uppercase transition-all"
             >
               {isSeeding ? <Loader2 className="animate-spin w-3 h-3 mr-2" /> : <Sparkles className="mr-2 w-3 h-3" />}
-              Seed Default Showcase
+              Seed Initial Showcase
             </Button>
           </div>
         </aside>
 
+        {/* Main List */}
         <div className="flex-1 p-8 md:p-16">
           <div className="max-w-6xl mx-auto space-y-12">
             <header className="space-y-4">
@@ -249,7 +251,7 @@ export default function AdminPage() {
               <div className="flex items-center gap-6">
                  <div className="w-12 h-px bg-primary/30" />
                  <span className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground">
-                   {videos?.length || 0} Cinematic Entries Synchronized
+                   {videos?.length || 0} Films Currently Synchronized
                  </span>
               </div>
             </header>
@@ -258,7 +260,7 @@ export default function AdminPage() {
               {videosLoading && (
                 <div className="py-24 flex flex-col items-center justify-center space-y-4 opacity-40">
                   <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                  <p className="text-[10px] tracking-widest uppercase">Fetching Vault...</p>
+                  <p className="text-[10px] tracking-widest uppercase">Contacting Vault...</p>
                 </div>
               )}
               
