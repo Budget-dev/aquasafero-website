@@ -1,10 +1,11 @@
+
 'use client';
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy } from 'firebase/firestore';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import {
   Dialog,
@@ -75,26 +76,24 @@ export function VaelReel() {
 
   const reelQuery = useMemoFirebase(() => {
     if (!firestore) return null;
-    return query(
-      collection(firestore, 'videos'), 
-      where('type', '>=', 'reel-'),
-      orderBy('type'),
-      orderBy('order', 'asc')
-    );
+    return query(collection(firestore, 'videos'), orderBy('order', 'asc'));
   }, [firestore]);
 
-  const { data: videos, loading } = useCollection(reelQuery);
+  const { data: allVideos, loading } = useCollection(reelQuery);
 
   const getFullUrl = (id: string) => {
     return `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
   };
 
-  if (!loading && (!videos || videos.length === 0)) return null;
+  const videos = allVideos as VideoItem[] || [];
+  
+  // Local filtering to avoid Firestore Composite Index requirements
+  const horizontals = videos.filter(v => v.type === 'reel-horizontal');
+  const feature = videos.find(v => v.type === 'reel-feature');
+  const mediums = videos.filter(v => v.type === 'reel-medium');
+  const verticals = videos.filter(v => v.type === 'reel-vertical');
 
-  const horizontals = (videos as VideoItem[] || []).filter(v => v.type === 'reel-horizontal');
-  const feature = (videos as VideoItem[] || []).find(v => v.type === 'reel-feature');
-  const mediums = (videos as VideoItem[] || []).filter(v => v.type === 'reel-medium');
-  const verticals = (videos as VideoItem[] || []).filter(v => v.type === 'reel-vertical');
+  if (!loading && videos.length === 0) return null;
 
   return (
     <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">

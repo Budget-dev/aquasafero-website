@@ -65,7 +65,7 @@ export default function AdminPage() {
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firestore) {
-      toast({ title: "Error", description: "Firebase is not initialized. Please verify your environment variables.", variant: "destructive" });
+      toast({ title: "Error", description: "Firebase is not initialized.", variant: "destructive" });
       return;
     }
     
@@ -73,7 +73,6 @@ export default function AdminPage() {
     const cleanId = extractYoutubeId(formData.youtubeId);
 
     try {
-      console.log('Attempting to publish to Firestore:', formData.title);
       await addDoc(collection(firestore, 'videos'), {
         ...formData,
         youtubeId: cleanId,
@@ -81,7 +80,7 @@ export default function AdminPage() {
         createdAt: serverTimestamp()
       });
       
-      toast({ title: "Success", description: `${formData.title} published to archive.` });
+      toast({ title: "Success", description: `${formData.title} added to archive.` });
       
       setFormData({
         title: '',
@@ -94,19 +93,15 @@ export default function AdminPage() {
         order: (videos?.length || 0) + 1
       });
     } catch (error: any) {
-      console.error('Detailed Error adding video:', error);
-      toast({ 
-        title: "Publishing Failed", 
-        description: error.message || "Is Firestore enabled in your project?", 
-        variant: "destructive" 
-      });
+      console.error('Error adding video:', error);
+      toast({ title: "Failed", description: error.message, variant: "destructive" });
     } finally {
       setIsAdding(false);
     }
   };
 
   const seedShowcase = async () => {
-    if (!firestore || !confirm('This will populate your archive with 6 flagship projects. Continue?')) return;
+    if (!firestore || !confirm('Populate archive with flagship projects?')) return;
     setIsSeeding(true);
     
     try {
@@ -126,9 +121,8 @@ export default function AdminPage() {
       });
       
       await batch.commit();
-      toast({ title: "Seeded", description: "Flagship projects added to your archive." });
+      toast({ title: "Seeded", description: "Archive populated." });
     } catch (error: any) {
-      console.error("Seeding error:", error);
       toast({ title: "Seed Failed", description: error.message, variant: "destructive" });
     } finally {
       setIsSeeding(false);
@@ -136,10 +130,10 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!firestore || !confirm('Are you sure you want to delete this project?')) return;
+    if (!firestore || !confirm('Delete this project?')) return;
     try {
       await deleteDoc(doc(firestore, 'videos', id));
-      toast({ title: "Deleted", description: "Entry removed from archive." });
+      toast({ title: "Deleted", description: "Entry removed." });
     } catch (error: any) {
       toast({ title: "Delete Failed", description: error.message, variant: "destructive" });
     }

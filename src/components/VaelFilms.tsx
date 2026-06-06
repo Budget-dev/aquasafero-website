@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy } from 'firebase/firestore';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 
 export function VaelFilms() {
@@ -13,14 +13,13 @@ export function VaelFilms() {
 
   const galleryQuery = useMemoFirebase(() => {
     if (!firestore) return null;
-    return query(
-      collection(firestore, 'videos'), 
-      where('type', '==', 'film-gallery'),
-      orderBy('order', 'asc')
-    );
+    return query(collection(firestore, 'videos'), orderBy('order', 'asc'));
   }, [firestore]);
 
-  const { data: films, loading } = useCollection(galleryQuery);
+  const { data: allVideos, loading } = useCollection(galleryQuery);
+  
+  // Local filtering to avoid Firestore Composite Index requirements
+  const films = (allVideos || []).filter((v: any) => v.type === 'film-gallery');
 
   const getCleanYoutubeEmbed = (id: string, isHovered: boolean) => {
     return `https://www.youtube.com/embed/${id}?autoplay=${isHovered ? 1 : 0}&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
@@ -43,7 +42,7 @@ export function VaelFilms() {
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/20 border border-border/20">
-        {films.map((film) => {
+        {films.map((film: any) => {
           const isHovered = hoveredFilm === film.id;
 
           return (

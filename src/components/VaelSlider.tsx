@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, orderBy } from 'firebase/firestore';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import {
   Dialog,
@@ -45,14 +46,13 @@ export function VaelSlider() {
 
   const heroQuery = useMemoFirebase(() => {
     if (!firestore) return null;
-    return query(
-      collection(firestore, 'videos'), 
-      where('type', '==', 'slider'),
-      orderBy('order', 'asc')
-    );
+    return query(collection(firestore, 'videos'), orderBy('order', 'asc'));
   }, [firestore]);
 
-  const { data: slides, loading } = useCollection(heroQuery);
+  const { data: allVideos, loading } = useCollection(heroQuery);
+  
+  // Local filtering to avoid Firestore Composite Index requirements
+  const slides = (allVideos as VideoData[] || []).filter(v => v.type === 'slider');
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -78,7 +78,7 @@ export function VaelSlider() {
     <section className="relative w-full bg-black pt-32 pb-24 md:pt-48 md:pb-40 min-h-[100vh] flex flex-col justify-center overflow-hidden select-none">
       <div className="embla overflow-visible" ref={emblaRef}>
         <div className="embla__container flex items-center">
-          {slides?.map((slide, index) => {
+          {slides.map((slide, index) => {
             const isActive = selectedIndex === index;
             
             return (
@@ -120,7 +120,7 @@ export function VaelSlider() {
       </div>
 
       <div className="flex justify-center gap-4 mt-16 md:mt-24">
-        {slides?.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => emblaApi?.scrollTo(i)}
