@@ -20,7 +20,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from '@/components/ui/sheet';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Shield } from 'lucide-react';
 
 const navLinks = [
   { href: '#reel', label: 'Work Reel' },
@@ -73,6 +73,11 @@ export function VaelHeader() {
       </div>
 
       <div className="flex items-center gap-4">
+        <Link href="/admin" className="hidden lg:flex items-center gap-2 text-[10px] tracking-widest uppercase text-muted-foreground hover:text-primary transition-colors mr-4">
+          <Shield className="w-3 h-3" />
+          Manage
+        </Link>
+
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8 transition-all duration-300 transform hover:-translate-y-0.5">
@@ -109,7 +114,6 @@ export function VaelHeader() {
             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             <SheetDescription className="sr-only">Access links to work, awards, and contact information.</SheetDescription>
             
-            {/* Mobile Nav Top Bar */}
             <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
               <div className="font-headline text-xl tracking-tighter italic text-white font-bold">
                 ERROL <span className="text-primary not-italic font-light">ADITYA</span>
@@ -142,12 +146,26 @@ export function VaelHeader() {
                     </SheetClose>
                   </motion.div>
                 ))}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="border-b border-white/5"
+                >
+                  <SheetClose asChild>
+                    <Link href="/admin" className="flex items-center justify-between py-6 group">
+                      <span className="font-headline text-2xl tracking-[0.05em] uppercase text-white/40 italic font-bold group-hover:text-primary transition-colors">
+                        Archive Manager
+                      </span>
+                    </Link>
+                  </SheetClose>
+                </motion.div>
               </nav>
 
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
                 className="pt-12"
               >
                 <Dialog>
@@ -170,7 +188,6 @@ export function VaelHeader() {
               </motion.div>
             </div>
 
-            {/* Socials & Footer */}
             <div className="px-8 py-10 border-t border-white/5 bg-white/[0.02]">
               <div className="flex flex-col gap-6">
                 <span className="text-[9px] tracking-[0.4em] uppercase text-white/40 block text-center">Social Connect</span>
