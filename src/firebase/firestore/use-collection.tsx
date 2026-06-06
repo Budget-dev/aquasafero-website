@@ -29,7 +29,7 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
       query,
       (snapshot: QuerySnapshot<T>) => {
         const items = snapshot.docs.map((doc) => ({
-          ...doc.data(),
+          ...(doc.data() as any),
           id: doc.id,
         }));
         setData(items);

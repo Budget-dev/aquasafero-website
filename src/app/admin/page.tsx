@@ -119,7 +119,7 @@ export default function AdminPage() {
                 <Label className="text-[10px] uppercase tracking-widest">YouTube ID</Label>
                 <Input 
                   required
-                  placeholder="e.g., gJKxIAmhbvg" 
+                  placeholder="e.g., NWPzwV3le50" 
                   className="rounded-none bg-background border-border"
                   value={formData.youtubeId}
                   onChange={e => setFormData({...formData, youtubeId: e.target.value})}
@@ -264,7 +264,7 @@ export default function AdminPage() {
                 </div>
               ))}
 
-              {!videosLoading && videos?.length === 0 && (
+              {!videosLoading && (!videos || videos.length === 0) && (
                 <div className="p-24 text-center opacity-40 italic font-headline">
                   No projects in the archive yet.
                 </div>

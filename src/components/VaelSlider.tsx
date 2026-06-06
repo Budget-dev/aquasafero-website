@@ -29,6 +29,12 @@ interface VideoData {
   type: string;
 }
 
+const mockSlides: VideoData[] = [
+  { id: '1', title: 'HAWTHORN', category: 'Narrative', youtubeId: 'NWPzwV3le50', role: 'Director / Visionary', type: 'slider' },
+  { id: '2', title: 'VERMILION', category: 'Short Film', youtubeId: 'lhdHDEhtMiI', role: 'Creative Director', type: 'slider' },
+  { id: '3', title: 'NOCTURNE', category: 'Documentary', youtubeId: 'nHSssoiMRE4', role: 'Director', type: 'slider' },
+];
+
 export function VaelSlider() {
   const firestore = useFirestore();
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -53,7 +59,8 @@ export function VaelSlider() {
     );
   }, [firestore]);
 
-  const { data: slides, loading } = useCollection(heroQuery);
+  const { data: dbSlides, loading } = useCollection(heroQuery);
+  const slides = dbSlides && dbSlides.length > 0 ? dbSlides : mockSlides;
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -72,14 +79,6 @@ export function VaelSlider() {
     const params = `?autoplay=${isActive || isModal ? 1 : 0}&mute=${isModal ? 0 : 1}&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${id}&enablejsapi=1`;
     return base + params;
   };
-
-  if (loading || !slides || slides.length === 0) {
-    return (
-      <section className="relative w-full bg-black min-h-[100vh] flex items-center justify-center">
-        <div className="text-[10px] tracking-[0.5em] uppercase text-primary animate-pulse">Initializing Vision...</div>
-      </section>
-    );
-  }
 
   return (
     <section className="relative w-full bg-black pt-32 pb-24 md:pt-48 md:pb-40 min-h-[100vh] flex flex-col justify-center overflow-hidden select-none">
