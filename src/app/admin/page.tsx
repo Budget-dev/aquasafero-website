@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, addDoc, deleteDoc, doc, serverTimestamp, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, serverTimestamp, query, orderBy, writeBatch } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { VaelHeader } from '@/components/VaelHeader';
-import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, CheckCircle2 } from 'lucide-react';
+import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, Sparkles } from 'lucide-react';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import { useToast } from '@/hooks/use-toast';
 
@@ -25,6 +25,7 @@ export default function AdminPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -52,7 +53,7 @@ export default function AdminPage() {
   const handleAddVideo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firestore) {
-      toast({ title: "Error", description: "Firebase not initialized", variant: "destructive" });
+      toast({ title: "Error", description: "Firebase not initialized. Check your .env file.", variant: "destructive" });
       return;
     }
     
@@ -60,6 +61,7 @@ export default function AdminPage() {
     const cleanId = extractYoutubeId(formData.youtubeId);
 
     try {
+      console.log('Attempting to publish:', formData.title);
       await addDoc(collection(firestore, 'videos'), {
         ...formData,
         youtubeId: cleanId,
@@ -73,17 +75,45 @@ export default function AdminPage() {
         title: '',
         category: '',
         youtubeId: '',
-        type: formData.type, // Keep same type for multi-add
+        type: formData.type,
         role: '',
         meta: '',
         award: '',
         order: (videos?.length || 0) + 1
       });
     } catch (error: any) {
-      console.error('Error adding video', error);
-      toast({ title: "Publishing Failed", description: error.message, variant: "destructive" });
+      console.error('Error adding video:', error);
+      toast({ title: "Publishing Failed", description: error.message || "Network error", variant: "destructive" });
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  const seedShowcase = async () => {
+    if (!firestore || !confirm('This will populate your archive with your 6 flagship projects. Continue?')) return;
+    setIsSeeding(true);
+    
+    const batch = writeBatch(firestore);
+    const defaultProjects = [
+      { title: 'HAWTHORN', youtubeId: 'NWPzwV3le50', type: 'slider', role: 'Director', category: 'Narrative', order: 1 },
+      { title: 'VERMILION', youtubeId: 'lhdHDEhtMiI', type: 'slider', role: 'Director', category: 'Commercial', order: 2 },
+      { title: 'NOCTURNE', youtubeId: 'nHSssoiMRE4', type: 'slider', role: 'Director', category: 'Documentary', order: 3 },
+      { title: 'VERTICAL ONE', youtubeId: 'NWPzwV3le50', type: 'reel-vertical', role: 'Director', category: 'Fashion', order: 4 },
+      { title: 'VERTICAL TWO', youtubeId: 'lhdHDEhtMiI', type: 'reel-vertical', role: 'Director', category: 'Lifestyle', order: 5 },
+      { title: 'VERTICAL THREE', youtubeId: 'nHSssoiMRE4', type: 'reel-vertical', role: 'Director', category: 'Art', order: 6 },
+    ];
+
+    try {
+      defaultProjects.forEach(proj => {
+        const newDoc = doc(collection(firestore, 'videos'));
+        batch.set(newDoc, { ...proj, createdAt: serverTimestamp() });
+      });
+      await batch.commit();
+      toast({ title: "Seeded", description: "Flagship projects added to your archive." });
+    } catch (error: any) {
+      toast({ title: "Seed Failed", description: error.message, variant: "destructive" });
+    } finally {
+      setIsSeeding(false);
     }
   };
 
@@ -93,7 +123,6 @@ export default function AdminPage() {
       await deleteDoc(doc(firestore, 'videos', id));
       toast({ title: "Deleted", description: "Entry removed from archive." });
     } catch (error: any) {
-      console.error('Error deleting video', error);
       toast({ title: "Delete Failed", description: error.message, variant: "destructive" });
     }
   };
@@ -181,10 +210,22 @@ export default function AdminPage() {
               disabled={isAdding}
               className="w-full rounded-none bg-primary text-primary-foreground py-6 h-auto text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-all"
             >
-              {isAdding ? <Loader2 className="animate-spin" /> : <Plus className="mr-2 w-4 h-4" />}
+              {isAdding ? <Loader2 className="animate-spin w-4 h-4" /> : <Plus className="mr-2 w-4 h-4" />}
               {isAdding ? 'Publishing...' : 'Publish Film'}
             </Button>
           </form>
+
+          <div className="mt-auto pt-10">
+            <Button 
+              onClick={seedShowcase}
+              disabled={isSeeding}
+              variant="outline"
+              className="w-full rounded-none border-primary/20 text-primary/60 hover:text-primary hover:border-primary py-4 h-auto text-[9px] tracking-[0.2em] uppercase transition-all"
+            >
+              {isSeeding ? <Loader2 className="animate-spin w-3 h-3 mr-2" /> : <Sparkles className="mr-2 w-3 h-3" />}
+              Seed Default Showcase
+            </Button>
+          </div>
         </aside>
 
         <div className="flex-1 p-8 md:p-16">
