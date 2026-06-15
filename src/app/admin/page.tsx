@@ -3,13 +3,13 @@
 
 import { useState, useEffect } from 'react';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, addDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { VaelHeader } from '@/components/VaelHeader';
-import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, AlertCircle, Award, Tag, Info, DatabaseZap } from 'lucide-react';
+import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, AlertCircle, Award, Tag } from 'lucide-react';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -37,7 +37,6 @@ const CATEGORIES = [
   'food'
 ];
 
-// Helper to extract YouTube ID
 const extractYoutubeId = (urlOrId: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = urlOrId.match(regExp);
@@ -48,7 +47,6 @@ export default function AdminPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [isAdding, setIsAdding] = useState(false);
-  const [isSeeding, setIsSeeding] = useState(false);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -137,62 +135,6 @@ export default function AdminPage() {
     }
   };
 
-  const seedMasterArchive = async () => {
-    if (!firestore) return;
-    setIsSeeding(true);
-    const batch = writeBatch(firestore);
-    
-    // Sample of the 87 videos provided - categorized across types
-    const mockData = [
-      { upper: "Sleek Kitchen", lower: "Asian Paint", url: "xTrPSfbWa0w", tags: ["ads", "home&living"], type: "slider" },
-      { upper: "Insurance", lower: "Cleartrip", url: "4UATuJFYKfg", tags: ["ads", "humor"], type: "slider" },
-      { upper: "Pudin Hara", lower: "Dabur", url: "gJKxIAmhbvg", tags: ["ads", "humor", "vfx"], type: "slider" },
-      { upper: "Zeo EV", lower: "Mahindra", url: "QdEZtNyJb5g", tags: ["ads", "car"], type: "reel-feature" },
-      { upper: "Family Man X Paatal Lok", lower: "Prime Video", url: "O1p-JVaAQV0", tags: ["promo", "celebrity"], type: "reel-horizontal" },
-      { upper: "Aspirants | Zindagi Ki Daud", lower: "Prime Video", url: "BYhQMzGxHmg", tags: ["promo", "celebrity"], type: "reel-horizontal" },
-      { upper: "Nation On Vacation", lower: "Cleartrip", url: "BG9F0xyy0RI", tags: ["ads", "humor"], type: "reel-medium" },
-      { upper: "Orry X Shikhar Dhawan", lower: "Amazon MX Player", url: "sroIT5FQMqs", tags: ["humor", "celebrity", "cricketers"], type: "reel-vertical" },
-      { upper: "Holiday Ft. Jackie Shroff", lower: "Amazon MX Player | Yatra", url: "lya8BHX-8SY", tags: ["celebrity", "humor"], type: "reel-vertical" },
-      { upper: "Sleek Kitchen - Film 2", lower: "Asian Paint", url: "2Y11kXDacR0", tags: ["ads", "humor", "home&living"], type: "film-gallery" },
-      { upper: "Family Man X Call Me Bae", lower: "Prime Video", url: "2EGATv-Glt8", tags: ["promo", "celebrity", "humor"], type: "film-gallery" },
-      { upper: "Set the Scene Ft. Raj Kumar Rao", lower: "Sun King", url: "eFhx307ykrk", tags: ["ads", "celebrity"], type: "film-gallery" },
-      { upper: "Glenzo", lower: "Apna Club", url: "WBE9PCT4Qk8", tags: ["ads", "humor", "vfx"], type: "film-gallery" },
-      { upper: "Offers Ft. Biswa Kalyanrath", lower: "Cleartrip X Axis Bank", url: "At-AHGHe-_0", tags: ["ads", "humor", "celebrity"], type: "film-gallery" },
-      { upper: "Criminal Justice S4 Ft. Pankaj Tripathi & Farah Khan", lower: "Jio Hotstar", url: "nHSssoiMRE4", tags: ["promo", "celebrity", "humor"], type: "film-gallery" },
-      { upper: "Criminal Justice S4 Ft. Pankaj Tripathi & Suneil Shetty", lower: "Jio Hotstar", url: "lhdHDEhtMiI", tags: ["promo", "celebrity", "humor"], type: "film-gallery" },
-      { upper: "Criminal Justice S4 Ft. Pankaj Tripathi & Bassi", lower: "Jio Hotstar", url: "NWPzwV3le50", tags: ["promo", "celebrity", "humor"], type: "film-gallery" },
-      { upper: "Passport Ft. Biswa Kalyanrath", lower: "Cleartrip", url: "K84ukJ_xxqA", tags: ["ads", "humor", "celebrity", "vfx"], type: "film-gallery" },
-      { upper: "Lays Wafer Style Ft. Alia Bhatt", lower: "PepsiCo", url: "9A3yNxNyzDw", tags: ["ads", "celebrity", "vfx", "food"], type: "film-gallery" },
-      { upper: "Gone Goa Go", lower: "Snitch", url: "cb9-3Rgpn5E", tags: ["ads", "humor"], type: "film-gallery" },
-      { upper: "360 Degrees Education Ft. AB Devilliers", lower: "Online Manipal", url: "s-YB9TZzoqQ", tags: ["ads", "celebrity", "cricketers"], type: "film-gallery" },
-      { upper: "Capture The Light Ft. KL Rahul", lower: "Realme", url: "ip5cVHUSRng", tags: ["ads", "celebrity", "cricketers"], type: "film-gallery" },
-      { upper: "Follow Kar Lo Yaar", lower: "Prime Video", url: "HVPeBwcbkSk", tags: ["promo", "celebrity"], type: "film-gallery" },
-      { upper: "Language Ft. Jackie Shroff", lower: "Amazon MX Player | Duolingo", url: "M3MUjiRYedw", tags: ["ads", "celebrity", "humor"], type: "film-gallery" }
-    ];
-
-    try {
-      mockData.forEach((item, index) => {
-        const vRef = doc(collection(firestore, 'videos'));
-        batch.set(vRef, {
-          title: `${item.upper} | ${item.lower}`,
-          upperText: item.upper,
-          lowerText: item.lower,
-          youtubeId: item.url,
-          category: item.tags,
-          type: item.type,
-          order: index,
-          createdAt: serverTimestamp()
-        });
-      });
-      await batch.commit();
-      toast({ title: "Master Archive Populated", description: "All projects have been added." });
-    } catch (err: any) {
-      toast({ title: "Seeding Failed", description: err.message, variant: "destructive" });
-    } finally {
-      setIsSeeding(false);
-    }
-  };
-
   return (
     <main className="min-h-screen bg-background text-foreground">
       <VaelHeader />
@@ -201,15 +143,6 @@ export default function AdminPage() {
         <aside className="w-85 border-r border-white/5 bg-card/20 hidden lg:flex flex-col sticky top-24 h-[calc(100vh-6rem)] p-8 overflow-y-auto no-scrollbar">
           <div className="mb-10 space-y-4">
             <h2 className="text-[10px] tracking-[0.5em] uppercase text-primary font-bold">Archive Manager</h2>
-            <Button 
-              onClick={seedMasterArchive} 
-              disabled={isSeeding}
-              variant="outline" 
-              className="w-full rounded-none border-primary/20 hover:border-primary text-[9px] uppercase tracking-widest h-10 gap-2"
-            >
-              {isSeeding ? <Loader2 className="animate-spin w-3 h-3" /> : <DatabaseZap className="w-3 h-3" />}
-              Populate Master Archive
-            </Button>
           </div>
 
           <form onSubmit={handleAddVideo} className="space-y-6">
