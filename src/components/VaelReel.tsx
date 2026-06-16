@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -107,34 +106,26 @@ export function VaelReel() {
   if (loading || videos.length === 0) return null;
 
   return (
-    <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:space-y-8">
+    <section id="reel" className="py-16 md:py-24 bg-background overflow-hidden border-t border-border/10">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:gap-8">
         
         {/* Features Row - Wide grid balancing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-           {features.slice(0, 1).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />
-           ))}
-           {horizontals.slice(0, 1).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
-           ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-4 md:mb-8">
+           {features.length > 0 && <VideoCard video={features[0]} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />}
+           {horizontals.length > 0 && <VideoCard video={horizontals[0]} aspectRatio="aspect-video" onClick={setSelectedVideo} />}
         </div>
 
-        {/* Vertical Row - Full 4-column stack for perfect row filling */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+        {/* Vertical Row - Exactly 4 items for a full row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-8">
            {verticals.slice(0, 4).map(v => (
              <VideoCard key={v.id} video={v} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
            ))}
         </div>
 
         {/* Dynamic Secondary Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-           {features.slice(1, 2).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-1" onClick={setSelectedVideo} />
-           ))}
-           {features.slice(2, 3).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />
-           ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-4 md:mb-8">
+           {features.length > 1 && <VideoCard video={features[1]} aspectRatio="aspect-video md:col-span-1" onClick={setSelectedVideo} />}
+           {features.length > 2 && <VideoCard video={features[2]} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />}
         </div>
 
         {/* Gallery Row */}

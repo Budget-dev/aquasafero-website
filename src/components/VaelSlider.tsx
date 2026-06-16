@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -77,8 +76,8 @@ export function VaelSlider() {
   if (loading || slides.length === 0) return null;
 
   return (
-    <section className="relative w-full bg-black pt-32 pb-12 md:pt-40 md:pb-24 min-h-[70vh] flex flex-col justify-center overflow-hidden select-none">
-      <div className="container mx-auto px-6 mb-8 md:mb-12">
+    <section className="relative w-full bg-black pt-28 pb-12 md:pt-36 md:pb-24 flex flex-col justify-center overflow-hidden select-none">
+      <div className="container mx-auto px-6 mb-4 md:mb-6">
         <div className="flex items-center gap-4">
           <div className="w-8 h-px bg-primary" />
           <span className="text-[10px] tracking-[0.4em] uppercase text-primary font-bold">Featured Projects</span>
@@ -93,7 +92,7 @@ export function VaelSlider() {
             return (
               <div 
                 key={slide.id} 
-                className="embla__slide flex-[0_0_95%] md:flex-[0_0_85%] lg:flex-[0_0_80%] min-w-0 px-2 md:px-6 relative"
+                className="embla__slide flex-[0_0_95%] md:flex-[0_0_85%] min-w-0 px-2 md:px-6 relative"
                 onClick={() => setSelectedVideo(slide)}
               >
                 <motion.div
@@ -126,7 +125,7 @@ export function VaelSlider() {
                   <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-30 flex items-end justify-between translate-y-4 group-hover:translate-y-0 transition-all duration-700">
                      <div className="space-y-1">
                         <span className="text-[9px] md:text-[10px] tracking-[0.4em] text-primary uppercase font-bold block mb-1">{slide.upperText}</span>
-                        <h3 className="text-xl md:text-5xl font-headline text-white italic tracking-tighter uppercase leading-none">{slide.lowerText || slide.title}</h3>
+                        <h3 className="text-xl md:text-4xl font-headline text-white italic tracking-tighter uppercase leading-none">{slide.lowerText || slide.title}</h3>
                      </div>
                      <div className="text-right space-y-2 hidden md:block">
                         {slide.award && (

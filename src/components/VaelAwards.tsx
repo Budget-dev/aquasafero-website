@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 
 export function VaelAwards() {
@@ -12,7 +11,7 @@ export function VaelAwards() {
   ];
 
   return (
-    <section id="awards" className="relative py-32 md:py-48 px-8 md:px-16 bg-background overflow-hidden border-t border-border/10">
+    <section id="awards" className="relative py-20 md:py-32 px-8 md:px-16 bg-background overflow-hidden border-t border-border/10">
       <div className="absolute right-0 top-0 w-1/2 h-full opacity-5 pointer-events-none">
         <Image src="https://picsum.photos/seed/awards-bg/1000/1500" alt="Cinematic Texture" fill className="object-cover" />
       </div>

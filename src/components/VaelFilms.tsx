@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -54,7 +53,7 @@ export function VaelFilms() {
         <div className="space-y-6">
           <span className="text-[10px] tracking-[0.6em] uppercase text-primary/60 block font-medium">Work Showcase</span>
           <h2 className="text-5xl md:text-9xl font-headline leading-[0.85] italic tracking-tighter text-white uppercase">
-            {activeCategory === 'all' ? 'The Master' : activeCategory} <br /> <span className="text-primary not-italic">Collection</span>
+            {activeCategory} <br /> <span className="text-primary not-italic">Collection</span>
           </h2>
         </div>
         <div className="flex flex-col md:items-end gap-4">
