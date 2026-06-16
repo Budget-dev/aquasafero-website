@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useFirestore, useCollection } from '@/firebase';
 import { collection, addDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
@@ -55,8 +55,9 @@ const MASTER_DATA = [
   { title: "Snitch | Go Goa Gone", upperText: "Gone Goa Go", lowerText: "Snitch", youtubeId: "cb9-3Rgpn5E", category: ["ads", "humor"], type: "reel-vertical", order: 5 },
   { title: "Lays | Siddhant", upperText: "Lays Wafer Style Ft. Siddhant", lowerText: "PepsiCo", youtubeId: "qiKh3ktuJ2Y", category: ["ads", "celebrity", "vfx", "food"], type: "reel-vertical", order: 6 },
   { title: "Kankhajura | Roshan", upperText: "Kankhuraja Ft. Roshan Mathew", lowerText: "Sony Liv", youtubeId: "cu3xh14RYGU", category: ["promo", "celebrity"], type: "reel-vertical", order: 7 },
-  { title: "Criminal Justice S4", upperText: "Criminal Justice S4 Ft. Pankaj Tripathi", lowerText: "Jio Hotstar", youtubeId: "nHSssoiMRE4", category: ["promo", "celebrity", "humor"], type: "film-gallery", order: 11 },
-  // ... (Mapping continues for all 87 items)
+  { title: "Criminal Justice S4", upperText: "Criminal Justice S4 Ft. Pankaj Tripathi", lowerText: "Jio Hotstar", youtubeId: "nHSssoiMRE4", category: ["promo", "celebrity", "humor"], type: "reel-vertical", order: 8 },
+  { title: "Criminal Justice S4 | Bas", upperText: "Criminal Justice S4 Ft. Bassi", lowerText: "Jio Hotstar", youtubeId: "NWPzwV3le50", category: ["promo", "celebrity", "humor"], type: "reel-vertical", order: 9 },
+  { title: "Amazon | Orry Launch", upperText: "Orry X Shikhar Dhawan", lowerText: "Amazon MX Player", youtubeId: "sroIT5FQMqs", category: ["humor", "celebrity"], type: "film-gallery", order: 11 },
 ];
 
 const extractYoutubeId = (urlOrId: string) => {
@@ -156,7 +157,7 @@ export default function AdminPage() {
         });
       });
       await batch.commit();
-      toast({ title: "Master Archive Populated", description: "All 87 projects injected." });
+      toast({ title: "Master archive populated", description: "Projects injected for a full layout." });
     } catch (error: any) {
       toast({ title: "Sync Failed", description: error.message, variant: "destructive" });
     } finally {
@@ -181,7 +182,7 @@ export default function AdminPage() {
       <div className="flex pt-32 md:pt-40 min-h-screen">
         <aside className="w-85 border-r border-white/5 bg-card/20 hidden lg:flex flex-col sticky top-24 h-[calc(100vh-6rem)] p-8 overflow-y-auto no-scrollbar">
           <div className="mb-10 space-y-4">
-            <h2 className="text-[10px] tracking-[0.5em] uppercase text-primary font-bold">Archive Manager</h2>
+            <h2 className="text-[10px] tracking-[0.5em] uppercase text-primary font-bold">Manager</h2>
             <Button 
               onClick={handlePopulateMaster} 
               disabled={isSeeding}
@@ -189,7 +190,7 @@ export default function AdminPage() {
               className="w-full rounded-none border-primary/20 text-[8px] uppercase tracking-widest h-8"
             >
               {isSeeding ? <Loader2 className="animate-spin w-3 h-3" /> : <Sparkles className="mr-2 w-3 h-3" />}
-              Populate Master Archive (87 Projects)
+              Populate Master Projects
             </Button>
           </div>
 
@@ -212,7 +213,7 @@ export default function AdminPage() {
               </div>
 
               <div className="space-y-3">
-                <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Genres (Select Multiple)</Label>
+                <Label className="text-[9px] uppercase tracking-widest text-muted-foreground">Genres (Multi-select)</Label>
                 <div className="grid grid-cols-2 gap-2 border border-white/5 p-3 bg-black/40">
                   {CATEGORIES.map(cat => (
                     <div key={cat} className="flex items-center space-x-2">
@@ -260,7 +261,7 @@ export default function AdminPage() {
 
             <Button type="submit" disabled={isAdding} className="w-full rounded-none bg-primary text-primary-foreground py-6 h-auto text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white hover:text-black transition-all">
               {isAdding ? <Loader2 className="animate-spin w-4 h-4" /> : <Plus className="mr-2 w-4 h-4" />}
-              {isAdding ? 'Publishing...' : 'Publish to Archive'}
+              {isAdding ? 'Publishing...' : 'Publish to Collection'}
             </Button>
           </form>
         </aside>
@@ -270,7 +271,7 @@ export default function AdminPage() {
             {videosError && (
               <Alert variant="destructive" className="rounded-none bg-destructive/10 border-destructive/20">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle className="text-[10px] uppercase tracking-widest font-bold">Firestore Config Required</AlertTitle>
+                <AlertTitle className="text-[10px] uppercase tracking-widest font-bold">Permissions Required</AlertTitle>
                 <AlertDescription className="text-[11px] leading-relaxed uppercase tracking-tight">
                   Please update your Firestore Rules to 'allow read, write: if true;'.
                 </AlertDescription>
@@ -279,7 +280,7 @@ export default function AdminPage() {
 
             <header className="space-y-6">
               <h1 className="text-5xl md:text-8xl font-headline italic font-bold tracking-tighter uppercase leading-none">
-                Active <span className="text-primary not-italic font-light">Archive</span>
+                Active <span className="text-primary not-italic font-light">Collection</span>
               </h1>
             </header>
 

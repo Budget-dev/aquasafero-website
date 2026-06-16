@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { X, Award, Play } from 'lucide-react';
 import Image from 'next/image';
 import { useFirestore, useCollection } from '@/firebase';
@@ -26,7 +26,6 @@ interface VideoItem {
   type: string;
   upperText?: string;
   lowerText?: string;
-  role?: string;
   meta?: string;
   award?: string;
   order?: number;
@@ -99,8 +98,9 @@ export function VaelReel() {
 
   const videos = (allVideos as VideoItem[] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   
-  // Dense layout filter
-  const features = videos.filter(v => v.type === 'reel-feature' || v.type === 'reel-horizontal');
+  // Dense layout filtering
+  const features = videos.filter(v => v.type === 'reel-feature');
+  const horizontals = videos.filter(v => v.type === 'reel-horizontal');
   const verticals = videos.filter(v => v.type === 'reel-vertical');
   const others = videos.filter(v => !['slider', 'reel-feature', 'reel-horizontal', 'reel-vertical'].includes(v.type));
 
@@ -108,23 +108,36 @@ export function VaelReel() {
 
   return (
     <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:gap-8 grid grid-cols-1">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:space-y-8">
         
-        {/* Features Row - Full or Split */}
+        {/* Features Row - Wide grid balancing */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-           {features.slice(0, 3).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio={v.type === 'reel-feature' ? "aspect-video md:col-span-2" : "aspect-video"} onClick={setSelectedVideo} />
+           {features.slice(0, 1).map(v => (
+             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />
+           ))}
+           {horizontals.slice(0, 1).map(v => (
+             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
            ))}
         </div>
 
-        {/* Vertical Row - Triple Stack */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+        {/* Vertical Row - Full 4-column stack for perfect row filling */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
            {verticals.slice(0, 4).map(v => (
              <VideoCard key={v.id} video={v} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
            ))}
         </div>
 
-        {/* Dynamic Others Row - Masonry feel */}
+        {/* Dynamic Secondary Features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+           {features.slice(1, 2).map(v => (
+             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-1" onClick={setSelectedVideo} />
+           ))}
+           {features.slice(2, 3).map(v => (
+             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />
+           ))}
+        </div>
+
+        {/* Gallery Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
            {others.slice(0, 6).map(v => (
              <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />

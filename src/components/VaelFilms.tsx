@@ -52,15 +52,15 @@ export function VaelFilms() {
     <section id="work" className="py-24 md:py-32 bg-background px-8 md:px-16 border-t border-border/10">
       <div className="max-w-7xl mx-auto mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-12">
         <div className="space-y-6">
-          <span className="text-[10px] tracking-[0.6em] uppercase text-primary/60 block font-medium">Archive Grid</span>
+          <span className="text-[10px] tracking-[0.6em] uppercase text-primary/60 block font-medium">Work Showcase</span>
           <h2 className="text-5xl md:text-9xl font-headline leading-[0.85] italic tracking-tighter text-white uppercase">
-            {activeCategory === 'all' ? 'The Master' : activeCategory} <br /> <span className="text-primary not-italic">Archive</span>
+            {activeCategory === 'all' ? 'The Master' : activeCategory} <br /> <span className="text-primary not-italic">Collection</span>
           </h2>
         </div>
         <div className="flex flex-col md:items-end gap-4">
           <p className="max-w-xs text-muted-foreground text-[10px] md:text-[11px] tracking-widest leading-relaxed uppercase font-body md:text-right">
             Displaying {films.length} curated projects.
-            {activeCategory !== 'all' && <span className="text-primary block mt-2">Currently filtering: {activeCategory}</span>}
+            {activeCategory !== 'all' && <span className="text-primary block mt-2">Filter: {activeCategory}</span>}
           </p>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function VaelFilms() {
               className="py-32 flex flex-col items-center justify-center text-center opacity-30 border border-dashed border-white/10"
             >
               <FilterX className="w-12 h-12 mb-4" />
-              <p className="italic font-headline text-2xl uppercase tracking-widest">No entries found for {activeCategory}</p>
+              <p className="italic font-headline text-2xl uppercase tracking-widest">No entries for {activeCategory}</p>
             </motion.div>
           )}
         </AnimatePresence>
