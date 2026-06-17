@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -34,13 +33,13 @@ interface VideoItem {
 const VideoCard = ({ video, aspectRatio, className, onClick }: { video: VideoItem, aspectRatio: string, className?: string, onClick: (v: VideoItem) => void }) => {
   return (
     <motion.div
-      className={`relative overflow-hidden bg-zinc-900 border border-white/5 group cursor-pointer ${aspectRatio} rounded-3xl shadow-2xl ${className}`}
+      className={`relative overflow-hidden bg-zinc-900 border border-white/5 group cursor-pointer ${aspectRatio} rounded-[2rem] shadow-2xl ${className}`}
       onClick={() => onClick(video)}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.015 }}
     >
       <div className="absolute inset-0 z-0">
         <Image 
@@ -62,17 +61,17 @@ const VideoCard = ({ video, aspectRatio, className, onClick }: { video: VideoIte
       </div>
       
       {/* Bottom Content Bar - Glassmorphism */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 p-6 md:p-8 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-all duration-700 pointer-events-none">
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
+      <div className="absolute bottom-0 left-0 right-0 z-30 p-4 md:p-6 flex flex-col justify-end translate-y-2 group-hover:translate-y-0 transition-all duration-700 pointer-events-none">
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-1 min-w-0">
             <span className="text-[8px] md:text-[9px] tracking-[0.4em] text-primary uppercase font-bold block mb-1">
               {Array.isArray(video.category) ? video.category[0] : video.category}
             </span>
-            <span className="text-[7px] md:text-[8px] tracking-[0.5em] text-white/50 uppercase font-bold block">{video.upperText}</span>
-            <h3 className="text-lg md:text-2xl font-headline text-white italic tracking-tighter uppercase leading-none">{video.lowerText || video.title}</h3>
+            <span className="text-[7px] md:text-[8px] tracking-[0.5em] text-white/50 uppercase font-bold block truncate">{video.upperText}</span>
+            <h3 className="text-lg md:text-xl font-headline text-white italic tracking-tighter uppercase leading-none truncate">{video.lowerText || video.title}</h3>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-shrink-0">
             {video.award && (
               <div className="flex items-center gap-2 text-primary">
                 <Award className="w-4 h-4" />
@@ -106,7 +105,6 @@ export function VaelReel() {
 
   const videos = (allVideos as VideoItem[] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   
-  // Categorize based on the requested 5-row layout types
   const horizontals = videos.filter(v => v.type === 'reel-horizontal');
   const features = videos.filter(v => v.type === 'reel-feature');
   const mediums = videos.filter(v => v.type === 'reel-medium');
@@ -116,7 +114,7 @@ export function VaelReel() {
 
   return (
     <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-16 space-y-8 md:space-y-12">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-16 space-y-12 md:space-y-16">
         
         {/* Row 1: 2 Horizontal Video Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -161,8 +159,8 @@ export function VaelReel() {
 
       <Dialog open={!!selectedVideo} onOpenChange={(open) => !open && setSelectedVideo(null)}>
         <DialogPortal>
-          <DialogOverlay className="z-[190] bg-black/90 backdrop-blur-xl" />
-          <DialogContent className="z-[200] max-w-[95vw] md:max-w-7xl bg-black border border-white/10 p-0 overflow-hidden rounded-3xl shadow-2xl aspect-video focus:outline-none">
+          <DialogOverlay className="z-[250] bg-black/90 backdrop-blur-xl" />
+          <DialogContent className="z-[300] max-w-[95vw] md:max-w-7xl bg-black border border-white/10 p-0 overflow-hidden rounded-[2.5rem] shadow-2xl aspect-video focus:outline-none">
             <DialogTitle className="sr-only">{selectedVideo?.title}</DialogTitle>
             <DialogDescription className="sr-only">Viewing project: {selectedVideo?.title}</DialogDescription>
             {selectedVideo && (

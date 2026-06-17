@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -56,19 +55,26 @@ export function VaelHeader() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
       const sections = ['reel', 'awards', 'contact'];
-      const current = sections.find(section => {
+      let current = '';
+      
+      for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          return rect.top >= 0 && rect.top <= 300;
+          // Adjust detection range for sticky header
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            current = section;
+            break;
+          }
         }
-        return false;
-      });
-      if (current) setActiveSection(current);
+      }
+      setActiveSection(current);
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -82,8 +88,26 @@ export function VaelHeader() {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
     
     if (cat !== 'all') {
-      const workSection = document.getElementById('work');
-      if (workSection) workSection.scrollIntoView({ behavior: 'smooth' });
+      // In category mode, ensure we jump to the top or the gallery
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname !== '/') return; // Only scroll on homepage
+    
+    e.preventDefault();
+    const id = href.substring(1);
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 120; // Account for sticky header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -105,6 +129,7 @@ export function VaelHeader() {
             <Link 
               key={link.href}
               href={link.href} 
+              onClick={(e) => scrollToSection(e, link.href)}
               className={cn(
                 "nav-link-strike hover:text-primary transition-colors",
                 activeSection === link.href.substring(1) ? 'active' : ''
@@ -148,7 +173,13 @@ export function VaelHeader() {
                 <nav className="flex flex-col gap-6">
                   {navLinks.map((link) => (
                     <SheetClose key={link.href} asChild>
-                      <Link href={link.href} className="font-headline text-3xl uppercase italic font-bold hover:text-primary transition-colors">{link.label}</Link>
+                      <Link 
+                        href={link.href} 
+                        onClick={(e) => scrollToSection(e, link.href)}
+                        className="font-headline text-3xl uppercase italic font-bold hover:text-primary transition-colors"
+                      >
+                        {link.label}
+                      </Link>
                     </SheetClose>
                   ))}
                 </nav>
