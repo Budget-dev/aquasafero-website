@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -30,52 +31,60 @@ interface VideoItem {
   order?: number;
 }
 
-const VideoCard = ({ video, aspectRatio, onClick }: { video: VideoItem, aspectRatio: string, onClick: (v: VideoItem) => void }) => {
+const VideoCard = ({ video, aspectRatio, className, onClick }: { video: VideoItem, aspectRatio: string, className?: string, onClick: (v: VideoItem) => void }) => {
   return (
     <motion.div
-      className={`relative overflow-hidden bg-zinc-900 border border-white/5 group cursor-pointer ${aspectRatio} rounded-none`}
+      className={`relative overflow-hidden bg-zinc-900 border border-white/5 group cursor-pointer ${aspectRatio} rounded-3xl shadow-2xl ${className}`}
       onClick={() => onClick(video)}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+      whileHover={{ scale: 1.02 }}
     >
       <div className="absolute inset-0 z-0">
         <Image 
           src={`https://img.youtube.com/vi/${video.youtubeId}/maxresdefault.jpg`}
           alt={video.title}
           fill
-          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+          className="object-cover transition-transform duration-1000 group-hover:scale-105"
         />
       </div>
       
-      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/10 transition-colors duration-700 z-10" />
-      <div className="absolute inset-0 cinematic-vignette opacity-60 z-10" />
+      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-700 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-15" />
 
+      {/* Play Icon - Centered */}
       <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-        <div className="w-12 h-12 rounded-full border border-primary flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <Play className="w-4 h-4 text-primary fill-primary ml-0.5" />
+        <div className="w-16 h-16 rounded-full border border-primary flex items-center justify-center bg-black/40 backdrop-blur-xl">
+          <Play className="w-6 h-6 text-primary fill-primary ml-1" />
         </div>
       </div>
       
-      <div className="absolute inset-0 z-30 p-4 md:p-6 flex flex-col justify-between translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
-        <div className="flex justify-between items-start">
-           <span className="text-[8px] tracking-[0.4em] text-primary uppercase font-bold bg-black/40 px-2 py-1 border border-primary/20">
-             {Array.isArray(video.category) ? video.category[0] : video.category}
-           </span>
-           {video.award && <Award className="w-3 h-3 md:w-4 md:h-4 text-primary drop-shadow-lg" />}
-        </div>
-        
-        <div className="flex justify-between items-end gap-4">
-          <div className="flex-1">
-            <span className="text-[7px] tracking-[0.5em] text-white/50 uppercase font-bold block mb-1">{video.upperText}</span>
-            <h3 className="text-sm md:text-2xl font-headline text-white italic tracking-tighter uppercase leading-none">{video.lowerText || video.title}</h3>
-          </div>
-          {video.meta && (
-            <span className="text-[7px] tracking-[0.3em] text-white/40 uppercase whitespace-nowrap mb-1">
-              {video.meta}
+      {/* Bottom Content Bar - Glassmorphism */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 p-6 md:p-8 flex flex-col justify-end translate-y-4 group-hover:translate-y-0 transition-all duration-700 pointer-events-none">
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-[8px] md:text-[9px] tracking-[0.4em] text-primary uppercase font-bold block mb-1">
+              {Array.isArray(video.category) ? video.category[0] : video.category}
             </span>
-          )}
+            <span className="text-[7px] md:text-[8px] tracking-[0.5em] text-white/50 uppercase font-bold block">{video.upperText}</span>
+            <h3 className="text-lg md:text-2xl font-headline text-white italic tracking-tighter uppercase leading-none">{video.lowerText || video.title}</h3>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            {video.award && (
+              <div className="flex items-center gap-2 text-primary">
+                <Award className="w-4 h-4" />
+                <span className="text-[8px] tracking-[0.2em] uppercase font-bold hidden md:inline">{video.award}</span>
+              </div>
+            )}
+            {video.meta && (
+              <span className="text-[7px] tracking-[0.3em] text-white/40 uppercase whitespace-nowrap">
+                {video.meta}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -97,57 +106,71 @@ export function VaelReel() {
 
   const videos = (allVideos as VideoItem[] || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   
-  // Dense layout filtering
-  const features = videos.filter(v => v.type === 'reel-feature');
+  // Categorize based on the requested 5-row layout types
   const horizontals = videos.filter(v => v.type === 'reel-horizontal');
+  const features = videos.filter(v => v.type === 'reel-feature');
+  const mediums = videos.filter(v => v.type === 'reel-medium');
   const verticals = videos.filter(v => v.type === 'reel-vertical');
-  const others = videos.filter(v => !['slider', 'reel-feature', 'reel-horizontal', 'reel-vertical'].includes(v.type));
 
   if (loading || videos.length === 0) return null;
 
   return (
-    <section id="reel" className="py-16 md:py-24 bg-background overflow-hidden border-t border-border/10">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:gap-8">
+    <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-16 space-y-8 md:space-y-12">
         
-        {/* Features Row - Wide grid balancing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-4 md:mb-8">
-           {features.length > 0 && <VideoCard video={features[0]} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />}
-           {horizontals.length > 0 && <VideoCard video={horizontals[0]} aspectRatio="aspect-video" onClick={setSelectedVideo} />}
+        {/* Row 1: 2 Horizontal Video Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {horizontals.slice(0, 2).map((v) => (
+            <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
+          ))}
         </div>
 
-        {/* Vertical Row - Exactly 4 items for a full row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-8">
-           {verticals.slice(0, 4).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
-           ))}
+        {/* Row 2: 2 Horizontal Video Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {horizontals.slice(2, 4).map((v) => (
+            <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
+          ))}
         </div>
 
-        {/* Dynamic Secondary Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-4 md:mb-8">
-           {features.length > 1 && <VideoCard video={features[1]} aspectRatio="aspect-video md:col-span-1" onClick={setSelectedVideo} />}
-           {features.length > 2 && <VideoCard video={features[2]} aspectRatio="aspect-video md:col-span-2" onClick={setSelectedVideo} />}
+        {/* Row 3: 1 Large Featured Video Section */}
+        <div className="w-full">
+          {features.length > 0 && (
+            <VideoCard 
+              video={features[0]} 
+              aspectRatio="aspect-video lg:aspect-[21/9]" 
+              className="w-full" 
+              onClick={setSelectedVideo} 
+            />
+          )}
         </div>
 
-        {/* Gallery Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-           {others.slice(0, 6).map(v => (
-             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
-           ))}
+        {/* Row 4: 2 Medium Video Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          {mediums.slice(0, 2).map((v) => (
+            <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
+          ))}
+        </div>
+
+        {/* Row 5: 4 Vertical Reel-Style Video Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          {verticals.slice(0, 4).map((v) => (
+            <VideoCard key={v.id} video={v} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
+          ))}
         </div>
       </div>
 
       <Dialog open={!!selectedVideo} onOpenChange={(open) => !open && setSelectedVideo(null)}>
         <DialogPortal>
           <DialogOverlay className="z-[190] bg-black/90 backdrop-blur-xl" />
-          <DialogContent className="z-[200] max-w-[95vw] md:max-w-6xl bg-black border border-white/10 p-0 overflow-hidden rounded-none aspect-video focus:outline-none">
+          <DialogContent className="z-[200] max-w-[95vw] md:max-w-7xl bg-black border border-white/10 p-0 overflow-hidden rounded-3xl shadow-2xl aspect-video focus:outline-none">
             <DialogTitle className="sr-only">{selectedVideo?.title}</DialogTitle>
             <DialogDescription className="sr-only">Viewing project: {selectedVideo?.title}</DialogDescription>
             {selectedVideo && (
               <div className="relative w-full h-full">
                 <iframe className="w-full h-full" src={getFullUrl(selectedVideo.youtubeId)} frameBorder="0" allowFullScreen />
-                <DialogClose className="absolute top-6 right-6 z-[220]">
-                  <div className="w-10 h-10 bg-black/40 border border-white/10 flex items-center justify-center">
-                    <X className="w-5 h-5 text-white" />
+                <DialogClose className="absolute top-8 right-8 z-[220]">
+                  <div className="w-12 h-12 bg-black/40 border border-white/10 flex items-center justify-center rounded-full backdrop-blur-md">
+                    <X className="w-6 h-6 text-white" />
                   </div>
                 </DialogClose>
               </div>

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { VaelHeader } from '@/components/VaelHeader';
-import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, AlertCircle, Award, Tag, Sparkles } from 'lucide-react';
+import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, AlertCircle, Award, Tag, Sparkles, Box } from 'lucide-react';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -18,9 +19,10 @@ import { cn } from '@/lib/utils';
 
 const PLACEMENT_TYPES = [
   { value: 'slider', label: 'Scroll Videos (Hero Slider)', icon: Film },
-  { value: 'reel-horizontal', label: 'Small Box (Horizontal)', icon: LayoutGrid },
-  { value: 'reel-feature', label: 'Big Videos (Wide Feature)', icon: Maximize },
-  { value: 'reel-vertical', label: 'Vertical Videos (9:16)', icon: Smartphone },
+  { value: 'reel-horizontal', label: 'Horizontal (Rows 1 & 2)', icon: LayoutGrid },
+  { value: 'reel-feature', label: 'Large Feature (Row 3)', icon: Maximize },
+  { value: 'reel-medium', label: 'Medium (Row 4)', icon: Box },
+  { value: 'reel-vertical', label: 'Vertical (Row 5)', icon: Smartphone },
   { value: 'film-gallery', label: 'Filmography Grid', icon: List },
 ];
 
@@ -37,42 +39,28 @@ const CATEGORIES = [
 ];
 
 const MASTER_DATA = [
-  // SLIDERS (20 items requested)
-  { title: "Sleek Kitchens - Film 1", upperText: "Sleek Kitchen", lowerText: "Asian Paint", youtubeId: "xTrPSfbWa0w", category: ["ads", "humor", "home&living"], type: "slider", order: 1 },
-  { title: "Cleartrip Insurance | Son", upperText: "Insurance", lowerText: "Cleartrip", youtubeId: "4UATuJFYKfg", category: ["ads", "humor"], type: "slider", order: 2 },
-  { title: "Dabur | Pudin Hara", upperText: "Pudin Hara", lowerText: "Dabur", youtubeId: "gJKxIAmhbvg", category: ["ads", "humor", "vfx"], type: "slider", order: 3 },
-  { title: "Mahindra Zeo EV", upperText: "Zeo EV", lowerText: "Mahindra", youtubeId: "QdEZtNyJb5g", category: ["ads", "car"], type: "slider", order: 4 },
-  { title: "Prime Video | Family Man", upperText: "Family Man X Paatal Lok", lowerText: "Prime Video", youtubeId: "O1p-JVaAQV0", category: ["promo", "celebrity"], type: "slider", order: 5 },
-  { title: "Aspirants | Zindagi ki Daud", upperText: "Aspirants | Zindagi Ki Daud", lowerText: "Prime Video", youtubeId: "BYhQMzGxHmg", category: ["promo", "celebrity"], type: "slider", order: 6 },
-  { title: "Cleartrip | Nation on Vacation", upperText: "Nation On Vacation", lowerText: "Cleartrip", youtubeId: "BG9F0xyy0RI", category: ["ads", "humor"], type: "slider", order: 7 },
-  { title: "Amazon MX | Orry", upperText: "Orry X Shikhar Dhawan", lowerText: "Amazon MX Player", youtubeId: "sroIT5FQMqs", category: ["humor", "celebrity", "cricketers"], type: "slider", order: 8 },
-  { title: "Amazon MX | Jackie", upperText: "Holiday Ft. Jackie Shroff", lowerText: "Amazon MX Player | Yatra", youtubeId: "lya8BHX-8SY", category: ["celebrity", "humor"], type: "slider", order: 9 },
-  { title: "Sleek Kitchens - Film 2", upperText: "Sleek Kitchen", lowerText: "Asian Paint", youtubeId: "2Y11kXDacR0", category: ["ads", "humor", "home&living"], type: "slider", order: 10 },
-  { title: "Family Man X Bae", upperText: "Family Man X Call Me Bae", lowerText: "Prime Video", youtubeId: "2EGATv-Glt8", category: ["promo", "celebrity", "humor"], type: "slider", order: 11 },
+  // ROW 1 & 2 - HORIZONTAL
+  { title: "Sleek Kitchens - Film 1", upperText: "Sleek Kitchen", lowerText: "Asian Paint", youtubeId: "xTrPSfbWa0w", category: ["ads", "home&living"], type: "reel-horizontal", order: 1 },
+  { title: "Cleartrip Insurance | Son", upperText: "Insurance", lowerText: "Cleartrip", youtubeId: "4UATuJFYKfg", category: ["ads", "humor"], type: "reel-horizontal", order: 2 },
+  { title: "Dabur | Pudin Hara", upperText: "Pudin Hara", lowerText: "Dabur", youtubeId: "gJKxIAmhbvg", category: ["ads", "vfx"], type: "reel-horizontal", order: 3 },
+  { title: "Mahindra Zeo EV", upperText: "Zeo EV", lowerText: "Mahindra", youtubeId: "QdEZtNyJb5g", category: ["ads", "car"], type: "reel-horizontal", order: 4 },
+
+  // ROW 3 - FEATURE
+  { title: "ALIA BHATT | LAYS", upperText: "Lays Wafer Style Ft. Alia Bhatt", lowerText: "PepsiCo", youtubeId: "9A3yNxNyzDw", category: ["ads", "celebrity", "vfx"], type: "reel-feature", order: 5 },
+
+  // ROW 4 - MEDIUM
+  { title: "Tata Nexon EV", upperText: "Tata Nexon EV", lowerText: "Tata Motors", youtubeId: "Qwh1Si0Uozs", category: ["ads", "car"], type: "reel-medium", order: 6 },
+  { title: "Godrej Interio", upperText: "Interio", lowerText: "Godrej", youtubeId: "6_FgbBV43q8", category: ["ads", "home&living"], type: "reel-medium", order: 7 },
+
+  // ROW 5 - VERTICAL
+  { title: "Snitch | Go Goa Gone", upperText: "Gone Goa Go", lowerText: "Snitch", youtubeId: "cb9-3Rgpn5E", category: ["ads", "humor"], type: "reel-vertical", order: 8 },
+  { title: "Lays | Siddhant", upperText: "Lays Wafer Style Ft. Siddhant", lowerText: "PepsiCo", youtubeId: "qiKh3ktuJ2Y", category: ["ads", "celebrity", "food"], type: "reel-vertical", order: 9 },
+  { title: "Kankhajura | Roshan", upperText: "Kankhuraja Ft. Roshan Mathew", lowerText: "Sony Liv", youtubeId: "cu3xh14RYGU", category: ["promo", "celebrity"], type: "reel-vertical", order: 10 },
+  { title: "Criminal Justice S4", upperText: "Criminal Justice S4", lowerText: "Jio Hotstar", youtubeId: "nHSssoiMRE4", category: ["promo", "celebrity"], type: "reel-vertical", order: 11 },
+
+  // HERO SLIDERS
   { title: "Sun King | Rajkummar", upperText: "Set the Scene", lowerText: "Sun King", youtubeId: "eFhx307ykrk", category: ["ads", "celebrity"], type: "slider", order: 12 },
-  { title: "Glenzo", upperText: "Glenzo", lowerText: "Apna Club", youtubeId: "WBE9PCT4Qk8", category: ["ads", "humor", "vfx"], type: "slider", order: 13 },
-  { title: "Cleartrip X Axis | Biswa", upperText: "Offers Ft. Biswa", lowerText: "Cleartrip X Axis", youtubeId: "At-AHGHe-_0", category: ["ads", "humor", "celebrity"], type: "slider", order: 14 },
-  { title: "Criminal Justice S4 | Pankaj", upperText: "Criminal Justice S4", lowerText: "Jio Hotstar", youtubeId: "nHSssoiMRE4", category: ["promo", "celebrity"], type: "slider", order: 15 },
-  { title: "Criminal Justice S4 | Suniel", upperText: "Criminal Justice S4", lowerText: "Jio Hotstar", youtubeId: "lhdHDEhtMiI", category: ["promo", "celebrity"], type: "slider", order: 16 },
-  { title: "Criminal Justice S4 | Bassi", upperText: "Criminal Justice S4", lowerText: "Jio Hotstar", youtubeId: "NWPzwV3le50", category: ["promo", "celebrity"], type: "slider", order: 17 },
-  { title: "Cleartrip | MeantForMore", upperText: "Passport Ft. Biswa", lowerText: "Cleartrip", youtubeId: "K84ukJ_xxqA", category: ["ads", "humor", "celebrity"], type: "slider", order: 18 },
-  { title: "Cleartrip Insurance | Baiko", upperText: "Insurance", lowerText: "Cleartrip", youtubeId: "zyvv-p8qfX0", category: ["ads", "humor"], type: "slider", order: 19 },
-  { title: "Cleartrip Insurance | Aai", upperText: "Insurance", lowerText: "Cleartrip", youtubeId: "qVqfnLB3ds0", category: ["ads", "humor"], type: "slider", order: 20 },
-
-  // FEATURES & HORIZONTALS
-  { title: "ALIA BHATT | LAYS", upperText: "Lays Wafer Style Ft. Alia Bhatt", lowerText: "PepsiCo", youtubeId: "9A3yNxNyzDw", category: ["ads", "celebrity", "vfx"], type: "reel-feature", order: 21 },
-  { title: "KL Rahul | Realme", upperText: "Capture The Light Ft. KL Rahul", lowerText: "Realme", youtubeId: "ip5cVHUSRng", category: ["ads", "celebrity", "cricketers"], type: "reel-feature", order: 22 },
-  { title: "Tata Nexon EV", upperText: "Tata Nexon EV", lowerText: "Tata Motors", youtubeId: "Qwh1Si0Uozs", category: ["ads", "car"], type: "reel-horizontal", order: 23 },
-  { title: "Godrej Interio", upperText: "Interio", lowerText: "Godrej", youtubeId: "6_FgbBV43q8", category: ["ads", "humor", "home&living"], type: "reel-horizontal", order: 24 },
-
-  // VERTICALS (At least 4 for a full row)
-  { title: "Snitch | Go Goa Gone", upperText: "Gone Goa Go", lowerText: "Snitch", youtubeId: "cb9-3Rgpn5E", category: ["ads", "humor"], type: "reel-vertical", order: 25 },
-  { title: "Lays | Siddhant", upperText: "Lays Wafer Style Ft. Siddhant", lowerText: "PepsiCo", youtubeId: "qiKh3ktuJ2Y", category: ["ads", "celebrity", "vfx", "food"], type: "reel-vertical", order: 26 },
-  { title: "Kankhajura | Roshan", upperText: "Kankhuraja Ft. Roshan Mathew", lowerText: "Sony Liv", youtubeId: "cu3xh14RYGU", category: ["promo", "celebrity"], type: "reel-vertical", order: 27 },
-  { title: "Criminal Justice S4 | Farah", upperText: "Criminal Justice S4", lowerText: "Jio Hotstar", youtubeId: "nHSssoiMRE4", category: ["promo", "celebrity", "humor"], type: "reel-vertical", order: 28 },
-
-  // GALLERY
-  { title: "Amazon | Orry Launch", upperText: "Orry X Shikhar Dhawan", lowerText: "Amazon MX Player", youtubeId: "sroIT5FQMqs", category: ["humor", "celebrity"], type: "film-gallery", order: 29 },
+  { title: "Aspirants | Zindagi ki Daud", upperText: "Aspirants | Zindagi Ki Daud", lowerText: "Prime Video", youtubeId: "BYhQMzGxHmg", category: ["promo", "celebrity"], type: "slider", order: 13 },
 ];
 
 const extractYoutubeId = (urlOrId: string) => {
@@ -205,7 +193,7 @@ export default function AdminPage() {
               className="w-full rounded-none border-primary/20 text-[8px] uppercase tracking-widest h-8"
             >
               {isSeeding ? <Loader2 className="animate-spin w-3 h-3" /> : <Sparkles className="mr-2 w-3 h-3" />}
-              Populate Master Projects
+              Populate Master Archive
             </Button>
           </div>
 
