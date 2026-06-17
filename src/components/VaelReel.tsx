@@ -142,7 +142,7 @@ export function VaelReel() {
           )}
         </div>
 
-        {/* Row 4: 2 Medium Video Cards */}
+        {/* Row 4: 2 Medium Video Cards (Ensuring exactly 2 for a full row) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {mediums.slice(0, 2).map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />

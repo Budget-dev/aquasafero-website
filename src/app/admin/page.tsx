@@ -6,7 +6,7 @@ import { collection, addDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/select';
 import { VaelHeader } from '@/components/VaelHeader';
 import { Loader2, Plus, Trash2, ExternalLink, LayoutGrid, Film, Smartphone, Maximize, List, AlertCircle, Award, Tag, Sparkles, Box } from 'lucide-react';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
@@ -47,7 +47,7 @@ const MASTER_DATA = [
   // ROW 3 - FEATURE
   { title: "ALIA BHATT | LAYS", upperText: "Lays Wafer Style Ft. Alia Bhatt", lowerText: "PepsiCo", youtubeId: "9A3yNxNyzDw", category: ["ads", "celebrity", "vfx"], type: "reel-feature", order: 5 },
 
-  // ROW 4 - MEDIUM
+  // ROW 4 - MEDIUM (Two items for a full row)
   { title: "Tata Nexon EV", upperText: "Tata Nexon EV", lowerText: "Tata Motors", youtubeId: "Qwh1Si0Uozs", category: ["ads", "car"], type: "reel-medium", order: 6 },
   { title: "Godrej Interio", upperText: "Interio", lowerText: "Godrej", youtubeId: "6_FgbBV43q8", category: ["ads", "home&living"], type: "reel-medium", order: 7 },
 
