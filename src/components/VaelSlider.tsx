@@ -24,6 +24,8 @@ interface VideoData {
   category: string | string[];
   youtubeId: string;
   type: string;
+  upperText?: string;
+  lowerText?: string;
   order?: number;
 }
 
@@ -91,7 +93,7 @@ export function VaelSlider({ activeCategory }: VaelSliderProps) {
   if (loading || slides.length === 0) return null;
 
   return (
-    <section className="relative w-full bg-black pb-8 md:pb-12 flex flex-col justify-center overflow-hidden select-none">
+    <section className="relative w-full bg-black py-4 md:py-8 flex flex-col justify-center overflow-hidden select-none">
       <div className="relative">
         <div className="embla overflow-visible" ref={emblaRef}>
           <div className="embla__container flex items-center">
@@ -122,6 +124,28 @@ export function VaelSlider({ activeCategory }: VaelSliderProps) {
                         priority={isActive}
                       />
                     </div>
+
+                    {/* Active Slide Metadata */}
+                    {isActive && (
+                      <div className="absolute inset-0 z-20 p-6 md:p-12 flex flex-col justify-between pointer-events-none">
+                        <div className="flex justify-start">
+                          <span className="text-[8px] md:text-[10px] tracking-[0.5em] text-white/60 uppercase font-bold">
+                            {slide.upperText}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-end">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl md:text-4xl font-headline text-white italic tracking-tighter uppercase leading-none">
+                              {slide.lowerText || slide.title}
+                            </h2>
+                          </div>
+                          <div className="flex gap-12">
+                            <span className="text-[9px] tracking-[0.4em] text-white/30 uppercase font-bold">PREV</span>
+                            <span className="text-[9px] tracking-[0.4em] text-white/30 uppercase font-bold">NEXT</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                 </div>
               );
@@ -129,18 +153,19 @@ export function VaelSlider({ activeCategory }: VaelSliderProps) {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-0 right-0 flex justify-between items-center px-[10%] pointer-events-none md:px-[15%]">
+        {/* Global Nav Buttons */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-[5%] md:px-[8%] pointer-events-none">
           <button 
             onClick={scrollPrev}
-            className="pointer-events-auto flex items-center gap-2 group/btn"
+            className="pointer-events-auto h-24 w-24 flex items-center justify-start group/btn"
           >
-            <span className="text-[10px] tracking-[0.4em] uppercase text-white/30 group-hover/btn:text-primary transition-colors font-bold">PREV</span>
+            <div className="w-4 h-px bg-white/20 group-hover/btn:bg-primary transition-colors" />
           </button>
           <button 
             onClick={scrollNext}
-            className="pointer-events-auto flex items-center gap-2 group/btn"
+            className="pointer-events-auto h-24 w-24 flex items-center justify-end group/btn"
           >
-            <span className="text-[10px] tracking-[0.4em] uppercase text-white/30 group-hover/btn:text-primary transition-colors font-bold">NEXT</span>
+            <div className="w-4 h-px bg-white/20 group-hover/btn:bg-primary transition-colors" />
           </button>
         </div>
       </div>
