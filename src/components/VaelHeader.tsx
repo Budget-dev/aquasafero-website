@@ -63,7 +63,6 @@ export function VaelHeader() {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Adjust detection range for sticky header
           if (rect.top <= 200 && rect.bottom >= 200) {
             current = section;
             break;
@@ -74,7 +73,7 @@ export function VaelHeader() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -86,21 +85,19 @@ export function VaelHeader() {
       params.set('category', cat);
     }
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    
     if (cat !== 'all') {
-      // In category mode, ensure we jump to the top or the gallery
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (pathname !== '/') return; // Only scroll on homepage
+    if (pathname !== '/') return;
     
     e.preventDefault();
     const id = href.substring(1);
     const element = document.getElementById(id);
     if (element) {
-      const offset = 120; // Account for sticky header
+      const offset = 120;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -120,11 +117,8 @@ export function VaelHeader() {
         "transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-between",
         isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent'
       )}>
-        <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold">
-          ERROL <span className="text-primary not-italic font-light">ADITYA</span>
-        </Link>
-        
-        <div className="hidden md:flex items-center justify-center gap-12 font-headline text-[12px] tracking-[0.25em] uppercase italic font-bold">
+        {/* Left Side: Nav Links */}
+        <div className="hidden md:flex flex-1 items-center gap-12 font-headline text-[11px] tracking-[0.25em] uppercase italic font-bold">
           {navLinks.map((link) => (
             <Link 
               key={link.href}
@@ -140,7 +134,15 @@ export function VaelHeader() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Center: Logo */}
+        <div className="flex-none text-center">
+          <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold">
+            ERROL <span className="text-primary not-italic font-light">ADITYA</span>
+          </Link>
+        </div>
+        
+        {/* Right Side: Watch Reel Button / Mobile Menu */}
+        <div className="flex flex-1 items-center justify-end gap-4">
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8">
@@ -188,7 +190,7 @@ export function VaelHeader() {
                   <div className="flex flex-wrap gap-2">
                     {categories.map(cat => (
                       <SheetClose key={cat} asChild>
-                        <button onClick={() => setCategory(cat)} className={cn("text-[10px] uppercase px-4 py-2 border", activeCategory === cat ? "bg-primary text-black border-primary" : "border-white/10")}>{cat}</button>
+                        <button onClick={() => setCategory(cat)} className={cn("text-[10px] uppercase px-4 py-2 border rounded-none", activeCategory === cat ? "bg-primary text-black border-primary" : "border-white/10")}>{cat}</button>
                       </SheetClose>
                     ))}
                   </div>
