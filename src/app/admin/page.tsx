@@ -1,15 +1,14 @@
-
 'use client';
 
 import { useState } from 'react';
 import { useFirestore, useCollection } from '@/firebase';
-import { collection, addDoc, deleteDoc, doc, serverTimestamp, writeBatch, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { VaelHeader } from '@/components/VaelHeader';
-import { Loader2, Plus, Trash2, LayoutGrid, Film, Smartphone, Maximize, Box, List, Sparkles, Save } from 'lucide-react';
+import { Loader2, Plus, Trash2, LayoutGrid, Film, Smartphone, Maximize, Box, List, Save } from 'lucide-react';
 import { useMemoFirebase } from '@/firebase/firestore/use-collection';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -109,10 +108,10 @@ export default function AdminPage() {
 
   const handleDelete = async (id: string) => {
     if (!firestore) return;
-    if (!confirm("Are you sure you want to remove this video from the series?")) return;
+    if (!confirm("Are you sure you want to remove this video?")) return;
     try {
       await deleteDoc(doc(firestore, 'videos', id));
-      toast({ title: "Project Removed from Series" });
+      toast({ title: "Project Removed" });
     } catch (error: any) {
       toast({ title: "Error", variant: "destructive" });
     }
@@ -194,7 +193,7 @@ export default function AdminPage() {
           <Tabs defaultValue="homepage" className="space-y-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/5 pb-8 gap-8">
               <h1 className="text-4xl md:text-7xl font-headline italic uppercase tracking-tighter leading-none">
-                Series <span className="text-primary not-italic font-light">Archive</span>
+                Series <span className="text-primary not-italic font-light">Management</span>
               </h1>
               <TabsList className="bg-white/5 rounded-none p-1 h-auto self-start md:self-auto">
                 <TabsTrigger value="homepage" className="rounded-none text-[10px] uppercase tracking-[0.2em] px-6 py-3 data-[state=active]:bg-primary data-[state=active]:text-black">Homepage Series</TabsTrigger>

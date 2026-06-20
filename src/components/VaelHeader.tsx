@@ -13,22 +13,8 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/ui/dialog';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet';
-import { Menu, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const navLinks = [
-  { href: '#reel', label: 'Work Reel' },
-  { href: '#awards', label: 'Honors' },
-  { href: '#contact', label: 'Inquiry' },
-];
 
 const categories = [
   'all',
@@ -48,32 +34,13 @@ export function VaelHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const activeCategory = searchParams.get('category') || 'all';
-
-  const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
-      const sections = ['reel', 'awards', 'contact'];
-      let current = '';
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 200 && rect.bottom >= 200) {
-            current = section;
-            break;
-          }
-        }
-      }
-      setActiveSection(current);
     };
-
     window.addEventListener('scroll', handleScroll);
-    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -90,24 +57,6 @@ export function VaelHeader() {
     }
   };
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (pathname !== '/') return;
-    
-    e.preventDefault();
-    const id = href.substring(1);
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 120;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
   const reelYoutubeId = "gJKxIAmhbvg";
   const reelUrl = `https://www.youtube.com/embed/${reelYoutubeId}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&loop=1&playlist=${reelYoutubeId}&enablejsapi=1`;
 
@@ -117,35 +66,21 @@ export function VaelHeader() {
         "transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-between",
         isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent'
       )}>
-        {/* Left Side: Nav Links */}
-        <div className="hidden md:flex flex-1 items-center gap-12 font-headline text-[11px] tracking-[0.25em] uppercase italic font-bold">
-          {navLinks.map((link) => (
-            <Link 
-              key={link.href}
-              href={link.href} 
-              onClick={(e) => scrollToSection(e, link.href)}
-              className={cn(
-                "nav-link-strike hover:text-primary transition-colors",
-                activeSection === link.href.substring(1) ? 'active' : ''
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        {/* Left Side: Empty for Symmetry */}
+        <div className="hidden md:flex flex-1" />
 
         {/* Center: Logo */}
         <div className="flex-none text-center">
-          <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold">
+          <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold uppercase">
             ERROL <span className="text-primary not-italic font-light">ADITYA</span>
           </Link>
         </div>
         
-        {/* Right Side: Watch Reel Button / Mobile Menu */}
-        <div className="flex flex-1 items-center justify-end gap-4">
+        {/* Right Side: Watch Reel Button */}
+        <div className="flex flex-1 items-center justify-end">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" className="hidden sm:flex rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8">
+              <Button variant="outline" className="rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground font-headline italic font-bold text-[10px] tracking-[0.2em] uppercase h-auto py-3 px-8">
                 Watch Reel
               </Button>
             </DialogTrigger>
@@ -160,44 +95,6 @@ export function VaelHeader() {
               </DialogClose>
             </DialogContent>
           </Dialog>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden rounded-none h-10 w-10">
-                <Menu className="w-6 h-6 text-foreground" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="bg-black/95 backdrop-blur-2xl border-l border-white/5 p-0 w-full sm:max-w-md flex flex-col z-[300]">
-              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-              <SheetDescription className="sr-only">Explore film categories and contact details.</SheetDescription>
-              <div className="p-8 space-y-8">
-                <div className="font-headline text-2xl italic font-bold">ERROL <span className="text-primary not-italic">ADITYA</span></div>
-                <nav className="flex flex-col gap-6">
-                  {navLinks.map((link) => (
-                    <SheetClose key={link.href} asChild>
-                      <Link 
-                        href={link.href} 
-                        onClick={(e) => scrollToSection(e, link.href)}
-                        className="font-headline text-3xl uppercase italic font-bold hover:text-primary transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </nav>
-                <div className="space-y-4 pt-10">
-                  <span className="text-[10px] tracking-widest uppercase text-white/40">Filter by Genre</span>
-                  <div className="flex flex-wrap gap-2">
-                    {categories.map(cat => (
-                      <SheetClose key={cat} asChild>
-                        <button onClick={() => setCategory(cat)} className={cn("text-[10px] uppercase px-4 py-2 border rounded-none", activeCategory === cat ? "bg-primary text-black border-primary" : "border-white/10")}>{cat}</button>
-                      </SheetClose>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
         </div>
       </nav>
 
