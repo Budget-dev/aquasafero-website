@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -24,7 +23,6 @@ interface VideoItem {
   type: string;
   upperText?: string;
   lowerText?: string;
-  award?: string;
   order?: number;
 }
 
@@ -35,9 +33,9 @@ interface VaelReelProps {
 const VideoCard = ({ video, aspectRatio, onClick }: { video: VideoItem, aspectRatio: string, onClick: (v: VideoItem) => void }) => {
   return (
     <motion.div
-      className={`relative overflow-hidden bg-black border border-white/5 group cursor-pointer ${aspectRatio} rounded-none shadow-2xl`}
+      className={`relative overflow-hidden bg-black border border-white/5 group cursor-pointer ${aspectRatio} rounded-none`}
       onClick={() => onClick(video)}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
@@ -54,9 +52,9 @@ const VideoCard = ({ video, aspectRatio, onClick }: { video: VideoItem, aspectRa
       <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-700 z-10" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent z-15 pointer-events-none" />
 
-      <div className="absolute bottom-0 left-0 right-0 z-30 p-6 flex flex-col justify-end transition-all duration-700 pointer-events-none translate-y-2 group-hover:translate-y-0">
-        <span className="text-[7px] md:text-[8px] tracking-[0.5em] text-primary uppercase font-bold block mb-2">{video.upperText}</span>
-        <h3 className="text-sm md:text-xl font-headline text-white italic tracking-tighter uppercase leading-none truncate">{video.lowerText || video.title}</h3>
+      <div className="absolute bottom-0 left-0 right-0 z-30 p-6 md:p-8 flex flex-col justify-end transition-all duration-700 pointer-events-none translate-y-2 group-hover:translate-y-0">
+        <span className="text-[7px] md:text-[9px] tracking-[0.5em] text-primary uppercase font-bold block mb-2">{video.upperText}</span>
+        <h3 className="text-sm md:text-2xl font-headline text-white italic tracking-tighter uppercase leading-none truncate">{video.lowerText || video.title}</h3>
       </div>
     </motion.div>
   );
@@ -81,52 +79,84 @@ export function VaelReel({ activeCategory }: VaelReelProps) {
     return categories.some(c => c?.toLowerCase() === activeCategory.toLowerCase());
   }).sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  // Strict 5-row structured grid logic based on the "Series" order
+  // Strict 5-row structured grid components
   const horizontals = filteredVideos.filter(v => v.type === 'reel-horizontal');
   const features = filteredVideos.filter(v => v.type === 'reel-feature');
   const mediums = filteredVideos.filter(v => v.type === 'reel-medium');
   const verticals = filteredVideos.filter(v => v.type === 'reel-vertical');
 
+  // Track which videos are used in the primary 5-row layout
+  const usedH = horizontals.slice(0, 4);
+  const usedF = features.slice(0, 1);
+  const usedM = mediums.slice(0, 2);
+  const usedV = verticals.slice(0, 4);
+
+  const usedIds = new Set([
+    ...usedH.map(v => v.id),
+    ...usedF.map(v => v.id),
+    ...usedM.map(v => v.id),
+    ...usedV.map(v => v.id)
+  ]);
+
+  // Any other video in the category goes to "More Projects"
+  const moreVideos = filteredVideos.filter(v => !usedIds.has(v.id) && v.type !== 'slider');
+
   if (loading) return null;
 
   return (
-    <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-border/10">
+    <section id="reel" className="py-24 md:py-32 bg-background overflow-hidden border-t border-white/5">
       <div className="max-w-[1600px] mx-auto px-4 md:px-16 space-y-4 md:space-y-12">
         
-        {/* Row 1: 2 Horizontal Series */}
+        {/* Row 1: 2 Horizontal */}
         <div className="grid grid-cols-2 gap-4 md:gap-12">
-          {horizontals.slice(0, 2).map((v) => (
+          {usedH.slice(0, 2).map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
           ))}
         </div>
 
-        {/* Row 2: 2 Horizontal Series */}
+        {/* Row 2: 2 Horizontal */}
         <div className="grid grid-cols-2 gap-4 md:gap-12">
-          {horizontals.slice(2, 4).map((v) => (
+          {usedH.slice(2, 4).map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
           ))}
         </div>
 
-        {/* Row 3: 1 Large Featured Series */}
+        {/* Row 3: 1 Large Featured */}
         <div className="w-full">
-          {features.slice(0, 1).map((v) => (
+          {usedF.map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-video md:aspect-[21/9]" onClick={setSelectedVideo} />
           ))}
         </div>
 
-        {/* Row 4: 2 Medium Series */}
+        {/* Row 4: 2 Medium */}
         <div className="grid grid-cols-2 gap-4 md:gap-12">
-          {mediums.slice(0, 2).map((v) => (
+          {usedM.map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
           ))}
         </div>
 
-        {/* Row 5: 4 Vertical Series */}
+        {/* Row 5: 4 Vertical */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-12">
-          {verticals.slice(0, 4).map((v) => (
+          {usedV.map((v) => (
             <VideoCard key={v.id} video={v} aspectRatio="aspect-[9/16]" onClick={setSelectedVideo} />
           ))}
         </div>
+
+        {/* Supplementary Section: More Projects */}
+        {moreVideos.length > 0 && (
+          <div className="pt-24 md:pt-48 space-y-12 md:space-y-24">
+            <div className="flex items-center gap-8">
+              <h2 className="text-[10px] tracking-[0.8em] uppercase text-primary/60 font-bold whitespace-nowrap">More Projects / {activeCategory}</h2>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 md:gap-12">
+              {moreVideos.map((v) => (
+                <VideoCard key={v.id} video={v} aspectRatio="aspect-video" onClick={setSelectedVideo} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <Dialog open={!!selectedVideo} onOpenChange={(open) => !open && setSelectedVideo(null)}>

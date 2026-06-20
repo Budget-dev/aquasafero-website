@@ -50,12 +50,12 @@ export function VaelHeader() {
   return (
     <div className="fixed top-0 left-0 right-0 z-[100] transition-all duration-500">
       <nav className={cn(
-        "transition-all duration-500 px-6 py-4 md:px-16 md:py-6 flex items-center justify-center",
+        "transition-all duration-500 px-6 py-4 md:px-16 md:py-8 flex items-center justify-center",
         isScrolled ? 'bg-black/95 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent'
       )}>
-        {/* Center: Logo */}
+        {/* Center: Logo Only */}
         <div className="flex-none text-center">
-          <Link href="/" className="font-headline text-xl md:text-3xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold uppercase">
+          <Link href="/" className="font-headline text-2xl md:text-4xl tracking-tighter hover:text-primary transition-all duration-700 italic font-bold uppercase">
             ERROL <span className="text-primary not-italic font-light">ADITYA</span>
           </Link>
         </div>
@@ -65,13 +65,13 @@ export function VaelHeader() {
         "bg-black/80 backdrop-blur-md border-b border-white/5 transition-all duration-500 overflow-hidden",
         isScrolled ? "h-12" : "h-0 md:h-12"
       )}>
-        <div className="max-w-7xl mx-auto px-6 md:px-16 h-full flex items-center overflow-x-auto no-scrollbar gap-8 md:gap-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-16 h-full flex items-center overflow-x-auto no-scrollbar gap-8 md:gap-12 justify-center">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
               className={cn(
-                "relative text-[9px] md:text-[11px] tracking-[0.25em] uppercase whitespace-nowrap transition-all duration-300 font-body py-1",
+                "relative text-[9px] md:text-[10px] tracking-[0.3em] uppercase whitespace-nowrap transition-all duration-300 font-body py-1",
                 activeCategory === cat ? "text-primary font-bold" : "text-muted-foreground hover:text-white"
               )}
             >
